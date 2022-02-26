@@ -1,0 +1,12 @@
+# dependencies
+node_modules/
+
+# testing
+coverage/
+
+# misc
+dist/
+.DS_Store
+.env
+.history/
+.husky/
