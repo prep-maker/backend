@@ -14,19 +14,15 @@ app.use((req: Request, res: Response) => {
 });
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  const message: ErrorState['reason'] & string = err.message;
+  const message: ErrorState['message'] & string = err.message;
 
   console.error(err);
 
-  switch (message) {
-    case 'duplicate': {
-      return res.status(400).send('이미 존재하는 이메일입니다.');
-    }
-
-    default: {
-      res.status(500).send('Server error');
-    }
+  if (message === 'unknown') {
+    return res.json({ message: 'Server Error' });
   }
+
+  res.json({ message });
 });
 
 app.listen(config.port, () => {
