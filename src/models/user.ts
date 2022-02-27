@@ -54,7 +54,7 @@ userSchema.methods.isPasswordValid = async function (
 userSchema.statics.findByEmail = async function (
   email: string
 ): Promise<UserDocument> {
-  const user = await this.findByEmail({ email });
+  const user = await this.findOne({ email });
 
   return user;
 };
