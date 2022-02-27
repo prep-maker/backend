@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
+import signinChain from './signin.js';
 import signupChain from './signup.js';
 
 const validate = (
@@ -17,3 +18,4 @@ const validate = (
 };
 
 export const signupValidators = [...signupChain, validate];
+export const signinValidators = [...signinChain, validate];
