@@ -25,7 +25,7 @@ class AuthService implements IAuthService {
 
   signup = async (user: User): Promise<ResultState<UserData>> => {
     const { email, name, password } = user;
-    const found = await this.userModel.findByEmail(email);
+    const found: UserDocument = await this.userModel.findByEmail(email);
 
     if (found) {
       return createErrorState('이미 존재하는 이메일입니다.');
@@ -37,7 +37,7 @@ class AuthService implements IAuthService {
       await newUser.save();
 
       const userId = newUser._id.toString();
-      const token = AuthService.createJwtToken(userId);
+      const token: string = AuthService.createJwtToken(userId);
 
       return createSuccessState({
         userId,
