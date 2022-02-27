@@ -1,16 +1,14 @@
-export const createErrorState = (
-  message: ErrorState['message'],
-  error?: Error
-): ErrorState => {
-  return { state: 'fail', message, error };
+export const createFailState = (
+  message: FailState['message'],
+  status = 500
+): FailState => {
+  return { state: 'fail', message, status };
 };
 
 export const createSuccessState = <T>(data: T): SuccessState<T> => {
   return { state: 'success', data };
 };
 
-export const createError = (result: ErrorState) => {
-  return result.message === 'unknown'
-    ? result.error
-    : new Error(result.message);
+export const createErrorState = (error: Error): ErrorState => {
+  return { state: 'error', error, status: 500 };
 };

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../models/user.js';
 import { IAuthService, UserData } from '../services/auth.js';
-import { createError } from '../utils/state.js';
 
 interface IAuthController {
   signup(req: Request, res: Response, next: NextFunction): void;
@@ -17,8 +16,8 @@ class AuthController implements IAuthController {
 
     const result: ResultState<UserData> = await this.authService.signup(user);
 
-    if (result.state === 'fail') {
-      return next(createError(result));
+    if (result.state !== 'success') {
+      return next(result);
     }
 
     res.json(result.data);
@@ -32,8 +31,8 @@ class AuthController implements IAuthController {
       password,
     });
 
-    if (result.state === 'fail') {
-      return next(createError(result));
+    if (result.state !== 'success') {
+      return next(result);
     }
 
     res.json(result.data);

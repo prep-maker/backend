@@ -45,6 +45,7 @@
     "*.ts": [
       "prettier --write",
       "eslint --fix"
-    ]
+    ],
+    "*.js": "eslint --cache --fix"
   }
 }

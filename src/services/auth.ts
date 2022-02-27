@@ -1,7 +1,11 @@
 import jwt from 'jsonwebtoken';
 import config from '../config/index.js';
 import { User, UserDocument, UserModel } from '../models/user.js';
-import { createErrorState, createSuccessState } from '../utils/state.js';
+import {
+  createErrorState,
+  createFailState,
+  createSuccessState,
+} from '../utils/state.js';
 
 export type UserData = {
   userId: string;
@@ -29,7 +33,7 @@ class AuthService implements IAuthService {
     const found: UserDocument = await this.userModel.findByEmail(email);
 
     if (found) {
-      return createErrorState('이미 존재하는 이메일입니다.');
+      return createFailState('이미 존재하는 이메일입니다.', 400);
     }
 
     try {
@@ -47,7 +51,7 @@ class AuthService implements IAuthService {
         token,
       });
     } catch (error) {
-      return createErrorState('unknown', error as Error);
+      return createErrorState(error as Error);
     }
   };
 
@@ -59,13 +63,13 @@ class AuthService implements IAuthService {
       const user: UserDocument = await this.userModel.findByEmail(email);
 
       if (!user) {
-        return createErrorState('유저를 찾을 수 없습니다.');
+        return createFailState('유저를 찾을 수 없습니다.', 404);
       }
 
       const isPasswordValid: boolean = await user.isPasswordValid(password);
 
       if (!isPasswordValid) {
-        return createErrorState('이메일 혹은 비밀번호가 잘못되었습니다.');
+        return createFailState('이메일 혹은 비밀번호가 잘못되었습니다.', 400);
       }
 
       const userId = user._id.toString();
@@ -78,7 +82,7 @@ class AuthService implements IAuthService {
         token,
       });
     } catch (error) {
-      return createErrorState('unknown', error as Error);
+      return createErrorState(error as Error);
     }
   };
 }
