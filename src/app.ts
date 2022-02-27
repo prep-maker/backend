@@ -14,7 +14,7 @@ app.use((req: Request, res: Response) => {
 });
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  const message: ErrorState['message'] & string = err.message;
+  const message: ErrorState['message'] = err.message;
 
   console.error(err);
 
