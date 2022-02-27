@@ -17,7 +17,7 @@ export interface IAuthService {
 class AuthService implements IAuthService {
   constructor(private readonly userModel: UserModel) {}
 
-  static createJwtToken = (userId: string): string => {
+  private static createJwtToken = (userId: string): string => {
     return jwt.sign({ id: userId }, config.jwt.secretKey, {
       expiresIn: config.jwt.expiresIn,
     });
