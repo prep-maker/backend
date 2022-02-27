@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from '../config/index.js';
 import { User, UserDocument, UserModel } from '../models/user.js';
+import { createErrorState, createSuccessState } from '../utils/state.js';
 
 export type UserData = {
   userId: string;
@@ -27,10 +28,7 @@ class AuthService implements IAuthService {
     const found = await this.userModel.findByEmail(email);
 
     if (found) {
-      return {
-        state: 'fail',
-        reason: 'duplicate',
-      };
+      return createErrorState('이미 존재하는 이메일입니다.');
     }
 
     try {
@@ -41,21 +39,14 @@ class AuthService implements IAuthService {
       const userId = newUser._id.toString();
       const token = AuthService.createJwtToken(userId);
 
-      return {
-        state: 'success',
-        data: {
-          userId,
-          email,
-          name,
-          token,
-        },
-      };
+      return createSuccessState({
+        userId,
+        email,
+        name,
+        token,
+      });
     } catch (error) {
-      return {
-        state: 'fail',
-        reason: 'unknown',
-        error: error as Error,
-      };
+      return createErrorState('unknown', error as Error);
     }
   };
 }
