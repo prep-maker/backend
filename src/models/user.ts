@@ -43,13 +43,20 @@ userSchema.methods.setPassword = async function (password: string) {
   this.password = hased;
 };
 
-userSchema.methods.isPasswordValid = async function (password: string) {
+userSchema.methods.isPasswordValid = async function (
+  password: string
+): Promise<boolean> {
   const result = await bcrypt.compare(password, this.password);
+
   return result;
 };
 
-userSchema.statics.findByEmail = async function (email: string) {
-  return this.findOne({ email });
+userSchema.statics.findByEmail = async function (
+  email: string
+): Promise<UserDocument> {
+  const user = await this.findByEmail({ email });
+
+  return user;
 };
 
 const userModel = mongoose.model<UserDocument, UserModel>('User', userSchema);
