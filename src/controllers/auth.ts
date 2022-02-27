@@ -5,6 +5,7 @@ import { createError } from '../utils/state.js';
 
 interface IAuthController {
   signup(req: Request, res: Response, next: NextFunction): void;
+  signin(req: Request, res: Response, next: NextFunction): void;
 }
 
 class AuthController implements IAuthController {
@@ -22,6 +23,17 @@ class AuthController implements IAuthController {
 
     res.json(result.data);
   };
+
+  signin = async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+
+    const result: ResultState<UserData> = await this.authService.signin({
+      email,
+      password,
+    });
+
+    if (result.state === 'fail') {
+      return next(createError(result));
     }
 
     res.json(result.data);
