@@ -12,6 +12,7 @@ export type UserData = {
 
 export interface IAuthService {
   signup: (user: User) => Promise<ResultState<UserData>>;
+  signin: (user: Omit<User, 'name'>) => Promise<ResultState<UserData>>;
 }
 
 class AuthService implements IAuthService {
@@ -43,6 +44,37 @@ class AuthService implements IAuthService {
         userId,
         email,
         name,
+        token,
+      });
+    } catch (error) {
+      return createErrorState('unknown', error as Error);
+    }
+  };
+
+  signin = async ({
+    email,
+    password,
+  }: Omit<User, 'name'>): Promise<ResultState<UserData>> => {
+    try {
+      const user: UserDocument = await this.userModel.findByEmail(email);
+
+      if (!user) {
+        return createErrorState('유저를 찾을 수 없습니다.');
+      }
+
+      const isPasswordValid: boolean = await user.isPasswordValid(password);
+
+      if (!isPasswordValid) {
+        return createErrorState('이메일 혹은 비밀번호가 잘못되었습니다.');
+      }
+
+      const userId = user._id.toString();
+      const token: string = AuthService.createJwtToken(userId);
+
+      return createSuccessState({
+        userId,
+        email,
+        name: user.name,
         token,
       });
     } catch (error) {
