@@ -13,16 +13,14 @@ app.use((req: Request, res: Response) => {
   res.send('Not Found');
 });
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  const message: ErrorState['message'] = err.message;
-
+app.use((err: BadState, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
 
-  if (message === 'unknown') {
-    return res.json({ message: 'Server Error' });
+  if (err.state === 'error') {
+    return res.status(err.status).json({ message: 'Server Error' });
   }
 
-  res.json({ message });
+  res.status(err.status).json({ message: err.message });
 });
 
 app.listen(config.port, () => {
