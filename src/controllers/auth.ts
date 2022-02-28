@@ -13,7 +13,6 @@ class AuthController implements IAuthController {
   signup = async (req: Request, res: Response, next: NextFunction) => {
     const { email, name, password } = req.body;
     const user: UserAccount = { email, name, password };
-
     const result: ResultState<UserResponse> = await this.authService.signup(
       user
     );
@@ -27,7 +26,6 @@ class AuthController implements IAuthController {
 
   signin = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
-
     const result: ResultState<UserResponse> = await this.authService.signin({
       email,
       password,
