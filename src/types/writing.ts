@@ -12,11 +12,11 @@ export interface WritingDocument extends WritingSchema, Document {}
 export interface WritingModel extends Model<WritingDocument> {
   findAllByUserId: (
     userId: mongoose.Types.ObjectId
-  ) => Promise<WritingDocument[]>;
+  ) => Promise<WritingSchema[]>;
   findDoneByUserId: (
     userId: mongoose.Types.ObjectId
-  ) => Promise<WritingDocument[]>;
+  ) => Promise<WritingSchema[]>;
   findEditingByUserId: (
     userId: mongoose.Types.ObjectId
-  ) => Promise<WritingDocument[]>;
+  ) => Promise<WritingSchema[]>;
 }
