@@ -1,22 +1,8 @@
 import bcrypt from 'bcrypt';
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose from 'mongoose';
 import config from '../config/index.js';
+import { UserDocument, UserModel, UserSchema } from '../types/user.js';
 import { useVirtualId, validateUnique } from '../utils/db.js';
-
-export type User = {
-  email: string;
-  name: string;
-  password: string;
-};
-
-export interface UserDocument extends User, Document {
-  setPassword: (password: string) => Promise<void>;
-  isPasswordValid: (password: string) => Promise<boolean>;
-}
-
-export interface UserModel extends Model<UserDocument> {
-  findByEmail: (email: string) => Promise<UserDocument>;
-}
 
 const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema({
   email: {
@@ -35,7 +21,7 @@ const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema({
   },
 });
 
-useVirtualId<User>(userSchema);
+useVirtualId<UserSchema>(userSchema);
 validateUnique(userSchema);
 
 userSchema.methods.setPassword = async function (password: string) {

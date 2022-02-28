@@ -1,34 +1,40 @@
 import jwt from 'jsonwebtoken';
 import config from '../config/index.js';
-import { User, UserDocument, UserModel } from '../models/user.js';
+import {
+  UserAccount,
+  UserDocument,
+  UserModel,
+  UserResponse,
+} from '../types/user.js';
 import {
   createErrorState,
   createFailState,
   createSuccessState,
 } from '../utils/state.js';
 
-export type UserData = {
-  userId: string;
-  email: string;
-  name: string;
-  token: string;
-};
-
 export interface IAuthService {
-  signup: (user: User) => Promise<ResultState<UserData>>;
-  signin: (user: Omit<User, 'name'>) => Promise<ResultState<UserData>>;
+  signup: (user: UserAccount) => Promise<ResultState<UserResponse>>;
+  signin: (
+    user: Omit<UserAccount, 'name'>
+  ) => Promise<ResultState<UserResponse>>;
 }
 
 class AuthService implements IAuthService {
   constructor(private readonly userModel: UserModel) {}
 
-  private static createJwtToken = (userId: string): string => {
-    return jwt.sign({ id: userId }, config.jwt.secretKey, {
+  private static createJwtToken = (user: UserDocument): string => {
+    const userInfo = {
+      userId: user._id.toString(),
+      email: user.email,
+      name: user.name,
+    };
+
+    return jwt.sign(userInfo, config.jwt.secretKey, {
       expiresIn: config.jwt.expiresIn,
     });
   };
 
-  signup = async (user: User): Promise<ResultState<UserData>> => {
+  signup = async (user: UserAccount): Promise<ResultState<UserResponse>> => {
     const { email, name, password } = user;
     const found: UserDocument = await this.userModel.findByEmail(email);
 
@@ -41,11 +47,10 @@ class AuthService implements IAuthService {
       await newUser.setPassword(password);
       await newUser.save();
 
-      const userId = newUser._id.toString();
-      const token: string = AuthService.createJwtToken(userId);
+      const token: string = AuthService.createJwtToken(newUser);
 
       return createSuccessState({
-        userId,
+        userId: newUser._id.toString(),
         email,
         name,
         token,
@@ -58,7 +63,7 @@ class AuthService implements IAuthService {
   signin = async ({
     email,
     password,
-  }: Omit<User, 'name'>): Promise<ResultState<UserData>> => {
+  }: Omit<UserAccount, 'name'>): Promise<ResultState<UserResponse>> => {
     try {
       const user: UserDocument = await this.userModel.findByEmail(email);
 
@@ -72,11 +77,10 @@ class AuthService implements IAuthService {
         return createFailState('이메일 혹은 비밀번호가 잘못되었습니다.', 400);
       }
 
-      const userId = user._id.toString();
-      const token: string = AuthService.createJwtToken(userId);
+      const token: string = AuthService.createJwtToken(user);
 
       return createSuccessState({
-        userId,
+        userId: user._id.toString(),
         email,
         name: user.name,
         token,
