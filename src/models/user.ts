@@ -19,6 +19,9 @@ const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema({
     type: String,
     required: true,
   },
+  writings: {
+    type: [mongoose.Types.ObjectId],
+  },
 });
 
 validateUnique(userSchema);
