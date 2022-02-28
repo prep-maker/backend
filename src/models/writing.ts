@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
-import { WritingDocument, WritingModel } from '../types/writing.js';
+import {
+  WritingDocument,
+  WritingModel,
+  WritingSchema,
+} from '../types/writing.js';
 
 const writingSchema: mongoose.Schema<WritingDocument> = new mongoose.Schema({
   isDone: {
@@ -21,7 +25,7 @@ const writingSchema: mongoose.Schema<WritingDocument> = new mongoose.Schema({
 
 writingSchema.statics.findAllByUserId = async function (
   userId: mongoose.Types.ObjectId
-): Promise<WritingDocument[]> {
+): Promise<WritingSchema[]> {
   const writings = await this.find({ author: userId }).lean();
 
   return writings;
@@ -29,7 +33,7 @@ writingSchema.statics.findAllByUserId = async function (
 
 writingSchema.statics.findDoneByUserId = async function (
   userId: mongoose.Types.ObjectId
-): Promise<WritingDocument[]> {
+): Promise<WritingSchema[]> {
   const writings = await this.find({ author: userId, isDone: true }).lean();
 
   return writings;
@@ -37,7 +41,7 @@ writingSchema.statics.findDoneByUserId = async function (
 
 writingSchema.statics.findEditingByUserId = async function (
   userId: mongoose.Types.ObjectId
-): Promise<WritingDocument[]> {
+): Promise<WritingSchema[]> {
   const writings = await this.find({ author: userId, isDone: false }).lean();
 
   return writings;
