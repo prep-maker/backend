@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from '../config/index.js';
+import { ERROR } from '../constants/error.js';
 import {
   UserAccount,
   UserDocument,
@@ -39,7 +40,7 @@ class AuthService implements IAuthService {
     const found: UserDocument = await this.userModel.findByEmail(email);
 
     if (found) {
-      return createFailState('이미 존재하는 이메일입니다.', 400);
+      return createFailState(ERROR.DUPLICATE_EMAIL, 400);
     }
 
     try {
@@ -68,13 +69,13 @@ class AuthService implements IAuthService {
       const user: UserDocument = await this.userModel.findByEmail(email);
 
       if (!user) {
-        return createFailState('유저를 찾을 수 없습니다.', 404);
+        return createFailState(ERROR.NOT_FOUND_USER, 404);
       }
 
       const isPasswordValid: boolean = await user.isPasswordValid(password);
 
       if (!isPasswordValid) {
-        return createFailState('이메일 혹은 비밀번호가 잘못되었습니다.', 400);
+        return createFailState(ERROR.INVALID_LOGIN, 400);
       }
 
       const token: string = AuthService.createJwtToken(user);
