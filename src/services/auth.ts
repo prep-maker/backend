@@ -24,7 +24,7 @@ class AuthService implements IAuthService {
 
   private static createJwtToken = (user: UserDocument): string => {
     const userInfo = {
-      userId: user._id.toString(),
+      id: user._id.toString(),
       email: user.email,
       name: user.name,
     };
@@ -50,7 +50,7 @@ class AuthService implements IAuthService {
       const token: string = AuthService.createJwtToken(newUser);
 
       return createSuccessState({
-        userId: newUser._id.toString(),
+        id: newUser._id.toString(),
         email,
         name,
         token,
@@ -80,7 +80,7 @@ class AuthService implements IAuthService {
       const token: string = AuthService.createJwtToken(user);
 
       return createSuccessState({
-        userId: user._id.toString(),
+        id: user._id.toString(),
         email,
         name: user.name,
         token,

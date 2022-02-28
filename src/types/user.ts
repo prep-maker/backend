@@ -1,7 +1,7 @@
 import mongoose, { Document, Model } from 'mongoose';
 
 export type UserResponse = {
-  userId: string;
+  id: string;
   email: string;
   name: string;
   token: string;
