@@ -1,17 +1,17 @@
 import mongoose, { Document, Model } from 'mongoose';
 
 export type UserResponse = {
-  id: string;
-  email: string;
-  name: string;
-  token: string;
+  readonly id: string;
+  readonly email: string;
+  readonly name: string;
+  readonly token: string;
 };
 
 export type UserSchema = {
-  email: string;
-  name: string;
+  readonly email: string;
+  readonly name: string;
   password: string;
-  writings: mongoose.Types.ObjectId[];
+  readonly writings: mongoose.Types.ObjectId[];
 };
 
 export type UserAccount = Omit<UserSchema, 'writings'>;
