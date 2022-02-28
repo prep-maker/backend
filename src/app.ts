@@ -2,12 +2,14 @@ import express, { NextFunction, Request, Response } from 'express';
 import config from './config/index.js';
 import initApp from './loaders/index.js';
 import authRouter from './routes/auth.js';
+import userRouter from './routes/user.js';
 
 const app = express();
 
 initApp(app);
 
 app.use('/auth', authRouter);
+app.use('/users', userRouter);
 
 app.use((req: Request, res: Response) => {
   res.send('Not Found');
