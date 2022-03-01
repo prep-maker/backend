@@ -21,6 +21,9 @@ export interface UserDocument extends UserSchema, Document {
   isPasswordValid: (password: string) => Promise<boolean>;
 }
 
-export interface UserModel extends Model<UserDocument> {
+export interface UserRepository {
+  new (user: UserAccount): UserDocument;
   findByEmail: (email: string) => Promise<UserDocument>;
 }
+
+export type UserModel = Model<UserDocument> & UserRepository;

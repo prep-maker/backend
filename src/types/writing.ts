@@ -9,7 +9,7 @@ export type WritingSchema = {
 
 export interface WritingDocument extends WritingSchema, Document {}
 
-export interface WritingModel extends Model<WritingDocument> {
+export interface WritingRepository {
   findAllByUserId: (
     userId: mongoose.Types.ObjectId
   ) => Promise<WritingSchema[]>;
@@ -20,3 +20,5 @@ export interface WritingModel extends Model<WritingDocument> {
     userId: mongoose.Types.ObjectId
   ) => Promise<WritingSchema[]>;
 }
+
+export type WritingModel = Model<WritingDocument> & WritingRepository;

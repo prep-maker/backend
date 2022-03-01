@@ -4,7 +4,7 @@ import { ERROR } from '../constants/error.js';
 import {
   UserAccount,
   UserDocument,
-  UserModel,
+  UserRepository,
   UserResponse,
 } from '../types/user.js';
 import {
@@ -21,7 +21,7 @@ export interface IAuthService {
 }
 
 class AuthService implements IAuthService {
-  constructor(private readonly userModel: UserModel) {}
+  constructor(private readonly userModel: UserRepository) {}
 
   signup = async (user: UserAccount): Promise<ResultState<UserResponse>> => {
     const { email, name, password } = user;

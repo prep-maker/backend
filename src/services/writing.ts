@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { ERROR } from '../constants/error.js';
 import { StateQuery } from '../types/express.js';
-import { WritingModel, WritingSchema } from '../types/writing.js';
+import { WritingRepository, WritingSchema } from '../types/writing.js';
 import {
   useErrorState,
   useFailState,
@@ -16,7 +16,7 @@ export interface IWritingService {
 }
 
 class WritingService implements IWritingService {
-  constructor(private readonly writingModel: WritingModel) {}
+  constructor(private readonly writingModel: WritingRepository) {}
 
   getByUserIdAndState = async (
     userId: string,
