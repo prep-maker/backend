@@ -8,12 +8,13 @@ import WritingService from '../writing';
 
 describe('WritingService', () => {
   let writingService: WritingService;
+  let userModelStub: UserModelStub;
+  let writingModelStub: WritingModelStub;
   const userId = '621cafb14ed8fbc8812e845c';
   beforeEach(() => {
-    writingService = new WritingService(
-      new WritingModelStub(),
-      new UserModelStub()
-    );
+    writingModelStub = new WritingModelStub();
+    userModelStub = new UserModelStub();
+    writingService = new WritingService(writingModelStub, userModelStub);
   });
 
   describe('getByUserIdAndState', () => {
@@ -56,6 +57,22 @@ describe('WritingService', () => {
     it('userId가 입력되면 새로운 writing 다큐먼트를 SuccessState로 리턴한다', async () => {
       const result = await writingService.create(userId);
 
+      expect(result).toEqual(
+        useSuccessState({
+          writingId: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
+          isDone: false,
+          title: 'Untitled',
+          blocks: [],
+        })
+      );
+    });
+
+    it('userId가 입력되면 새 writing을 생성하고 SuccessState로 리턴한다', async () => {
+      const spy = jest.spyOn(userModelStub, 'addWriting');
+
+      const result = await writingService.create(userId);
+
+      expect(spy).toHaveBeenCalled();
       expect(result).toEqual(
         useSuccessState({
           writingId: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
