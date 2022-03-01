@@ -1,7 +1,12 @@
 import mongoose from 'mongoose';
 import { ERROR } from '../constants/error.js';
 import { StateQuery } from '../types/express.js';
-import { WritingRepository, WritingSchema } from '../types/writing.js';
+import {
+  WritingDocument,
+  WritingRepository,
+  WritingResponse,
+  WritingSchema,
+} from '../types/writing.js';
 import {
   useErrorState,
   useFailState,
@@ -13,10 +18,32 @@ export interface IWritingService {
     userId: string,
     state: StateQuery
   ) => Promise<ResultState<WritingSchema[]>>;
+  create: (userId: string) => Promise<ResultState<WritingResponse>>;
 }
 
 class WritingService implements IWritingService {
   constructor(private readonly writingModel: WritingRepository) {}
+
+  create = async (userId: string): Promise<ResultState<WritingResponse>> => {
+    if (!mongoose.isValidObjectId(userId)) {
+      return useFailState(ERROR.INVALID_ID, 400);
+    }
+
+    const id = mongoose.Types.ObjectId(userId);
+    const newWriting: WritingDocument = await this.writingModel.create({
+      isDone: false,
+      author: id,
+      title: 'Untitled',
+      blocks: [],
+    });
+
+    return useSuccessState({
+      writingId: newWriting._id,
+      isDone: false,
+      title: 'Untitled',
+      blocks: [],
+    });
+  };
 
   getByUserIdAndState = async (
     userId: string,
