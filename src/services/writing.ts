@@ -62,6 +62,7 @@ class WritingService implements IWritingService {
         title: 'Untitled',
         blocks: [],
       });
+      this.userModel.addWriting(id, newWriting._id);
 
       return useSuccessState({
         writingId: newWriting._id,
