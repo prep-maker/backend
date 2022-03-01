@@ -3,13 +3,13 @@ import { ERROR } from '../constants/error.js';
 import { StateQuery } from '../types/express.js';
 import { WritingModel, WritingSchema } from '../types/writing.js';
 import {
-  createErrorState,
-  createFailState,
-  createSuccessState,
+  useErrorState,
+  useFailState,
+  useSuccessState,
 } from '../utils/state.js';
 
 export interface IWritingService {
-  getByUserId: (
+  getByUserIdAndState: (
     userId: string,
     state: StateQuery
   ) => Promise<ResultState<WritingSchema[]>>;
@@ -18,26 +18,25 @@ export interface IWritingService {
 class WritingService implements IWritingService {
   constructor(private readonly writingModel: WritingModel) {}
 
-  getByUserId = async (
+  getByUserIdAndState = async (
     userId: string,
     state: StateQuery
   ): Promise<ResultState<WritingSchema[]>> => {
     if (!mongoose.isValidObjectId(userId)) {
-      return createFailState(ERROR.INVALID_ID, 400);
+      return useFailState(ERROR.INVALID_ID, 400);
     }
 
     const id = mongoose.Types.ObjectId(userId);
 
     try {
-      const writings = await this.findWritingsByUserId(id, state);
-
-      return createSuccessState(writings);
+      const writings = await this.findByUserIdAndState(id, state);
+      return useSuccessState(writings);
     } catch (error) {
-      return createErrorState(error as Error);
+      return useErrorState(error as Error);
     }
   };
 
-  private findWritingsByUserId = async (
+  private findByUserIdAndState = async (
     userId: mongoose.Types.ObjectId,
     state: StateQuery
   ): Promise<WritingSchema[]> => {

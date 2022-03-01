@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-import { createFailState } from '../../utils/state.js';
+import { useFailState } from '../../utils/state.js';
 import stateQueryChain from './query.js';
 import signinChain from './signin.js';
 import signupChain from './signup.js';
@@ -19,7 +19,7 @@ const validate = (
 
   const error: { message: string; status?: number } = errors.array()[0].msg;
 
-  return next(createFailState(error.message, error.status));
+  return next(useFailState(error.message, error.status));
 };
 
 export const signupValidators = [...signupChain, validate];

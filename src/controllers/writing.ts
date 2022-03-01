@@ -1,11 +1,11 @@
 import { NextFunction, Response } from 'express';
 import { IWritingService } from '../services/writing.js';
-import { StateQuery, TypedRequestQuery } from '../types/express.js';
+import { StateQuery, TypedRequestQueryAndParams } from '../types/express.js';
 import { WritingSchema } from '../types/writing.js';
 
 interface IWritingController {
   getWritings: (
-    req: TypedRequestQuery<{ state: StateQuery }, { userId: string }>,
+    req: TypedRequestQueryAndParams<{ state: StateQuery }, { userId: string }>,
     res: Response,
     next: NextFunction
   ) => void;
@@ -14,14 +14,14 @@ interface IWritingController {
 class WritingController implements IWritingController {
   constructor(private readonly writingService: IWritingService) {}
   getWritings = async (
-    req: TypedRequestQuery<{ state: StateQuery }, { userId: string }>,
+    req: TypedRequestQueryAndParams<{ state: StateQuery }, { userId: string }>,
     res: Response,
     next: NextFunction
   ) => {
     const userId: string = req.params.userId;
     const state: StateQuery = req.query.state;
     const result: ResultState<WritingSchema[]> =
-      await this.writingService.getByUserId(userId, state);
+      await this.writingService.getByUserIdAndState(userId, state);
 
     if (result.state !== 'success') {
       return next(result);
