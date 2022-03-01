@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { IWritingService } from '../services/writing.js';
 import { StateQuery, TypedRequestQueryAndParams } from '../types/express.js';
-import { WritingSchema } from '../types/writing.js';
+import { WritingDocument } from '../types/writing.js';
 
 interface IWritingController {
   getWritings: (
@@ -20,7 +20,7 @@ class WritingController implements IWritingController {
   ) => {
     const userId: string = req.params.userId;
     const state: StateQuery = req.query.state;
-    const result: ResultState<WritingSchema[]> =
+    const result: ResultState<WritingDocument[]> =
       await this.writingService.getByUserIdAndState(userId, state);
 
     if (result.state !== 'success') {
