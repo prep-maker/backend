@@ -50,19 +50,24 @@ class WritingService implements IWritingService {
     }
 
     const id = mongoose.Types.ObjectId(userId);
-    const newWriting: WritingDocument = await this.writingModel.create({
-      isDone: false,
-      author: id,
-      title: 'Untitled',
-      blocks: [],
-    });
 
-    return useSuccessState({
-      writingId: newWriting._id,
-      isDone: false,
-      title: 'Untitled',
-      blocks: [],
-    });
+    try {
+      const newWriting: WritingDocument = await this.writingModel.create({
+        isDone: false,
+        author: id,
+        title: 'Untitled',
+        blocks: [],
+      });
+
+      return useSuccessState({
+        writingId: newWriting._id,
+        isDone: false,
+        title: 'Untitled',
+        blocks: [],
+      });
+    } catch (error) {
+      return useErrorState(error as Error);
+    }
   };
 
   private findByUserIdAndState = async (
