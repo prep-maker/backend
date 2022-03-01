@@ -10,7 +10,7 @@ export type UserResponse = {
 export type UserSchema = {
   readonly email: string;
   readonly name: string;
-  readonly password: string;
+  password: string;
   readonly writings: mongoose.Types.ObjectId[];
 };
 
