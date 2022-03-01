@@ -24,24 +24,20 @@ class AuthService implements IAuthService {
   constructor(private readonly userModel: UserRepository) {}
 
   signup = async (user: UserAccount): Promise<ResultState<UserResponse>> => {
-    const { email, name, password } = user;
-    const found: UserDocument = await this.userModel.findByEmail(email);
+    const found: UserDocument = await this.userModel.findByEmail(user.email);
 
     if (found) {
       return useFailState(ERROR.DUPLICATE_EMAIL, 400);
     }
 
     try {
-      const newUser: UserDocument = new this.userModel(user);
-      await newUser.setPassword(password);
-      await newUser.save();
-
+      const newUser = await this.userModel.createNewUser(user);
       const token: string = AuthService.createJwtToken(newUser);
 
       return useSuccessState({
         id: newUser._id.toString(),
-        email,
-        name,
+        email: newUser.email,
+        name: newUser.name,
         token,
       });
     } catch (error) {

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import config from '../config/index.js';
-import { UserDocument, UserModel } from '../types/user.js';
+import { UserAccount, UserDocument, UserModel } from '../types/user.js';
 import { validateUnique } from '../utils/db.js';
 
 const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema({
@@ -27,8 +27,8 @@ const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema({
 validateUnique(userSchema);
 
 userSchema.methods.setPassword = async function (password: string) {
-  const hased = await bcrypt.hash(password, config.bcrypt.saltRound);
-  this.password = hased;
+  const hashed = await bcrypt.hash(password, config.bcrypt.saltRound);
+  this.password = hashed;
 };
 
 userSchema.methods.isPasswordValid = async function (
@@ -45,6 +45,16 @@ userSchema.statics.findByEmail = async function (
   const user = await this.findOne({ email });
 
   return user;
+};
+
+userSchema.statics.createNewUser = async function (
+  user: UserAccount
+): Promise<UserDocument> {
+  const newUser: UserDocument = new this(user);
+  await newUser.setPassword(user.password);
+  await newUser.save();
+
+  return newUser;
 };
 
 const userModel = mongoose.model<UserDocument, UserModel>('User', userSchema);
