@@ -57,7 +57,7 @@ userSchema.statics.createNewUser = async function (
   return newUser;
 };
 
-userSchema.statics.addWritings = async function (
+userSchema.statics.addWriting = async function (
   userId: mongoose.Types.ObjectId,
   writingId: mongoose.Types.ObjectId
 ) {
