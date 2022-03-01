@@ -20,7 +20,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.3",
     "mongoose-unique-validator": "^3.0.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "ts-mockito": "^2.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
