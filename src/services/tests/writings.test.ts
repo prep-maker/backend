@@ -21,6 +21,22 @@ describe('WritingService', () => {
     when(modelStub.findEditingByUserId(deepEqual(objectId))).thenResolve(
       dummyWritings.filter((writing) => !writing.isDone) as any
     );
+    when(
+      modelStub.create(
+        deepEqual({
+          isDone: false,
+          author: objectId,
+          title: 'Untitled',
+          blocks: [],
+        })
+      )
+    ).thenResolve({
+      _id: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
+      isDone: false,
+      author: userId,
+      title: 'Untitled',
+      blocks: [],
+    } as any);
     writingService = new WritingService(instance(modelStub));
   });
 
@@ -57,6 +73,27 @@ describe('WritingService', () => {
       expect(result).toEqual(
         useSuccessState(dummyWritings.filter((writing) => writing.isDone))
       );
+    });
+  });
+
+  describe('create', () => {
+    it('userId가 입력되면 새로운 writing 다큐먼트를 SuccessState로 리턴한다', async () => {
+      const result = await writingService.create(userId);
+
+      expect(result).toEqual(
+        useSuccessState({
+          writingId: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
+          isDone: false,
+          title: 'Untitled',
+          blocks: [],
+        })
+      );
+    });
+
+    it('잘못된 형식의 userId가 입력되면 status 400의 FailState를 리턴한다.', async () => {
+      const result = await writingService.create('invalidId');
+
+      expect(result).toEqual(useFailState(ERROR.INVALID_ID, 400));
     });
   });
 });
