@@ -7,18 +7,26 @@ export type WritingSchema = {
   readonly blocks: mongoose.Types.ObjectId[];
 };
 
+export type WritingResponse = {
+  readonly writingId: mongoose.Types.ObjectId;
+  readonly isDone: boolean;
+  readonly title: string;
+  readonly blocks?: mongoose.Types.ObjectId[];
+};
+
 export interface WritingDocument extends WritingSchema, Document {}
 
 export interface WritingRepository {
   findAllByUserId: (
     userId: mongoose.Types.ObjectId
-  ) => Promise<WritingSchema[]>;
+  ) => Promise<WritingDocument[]>;
   findDoneByUserId: (
     userId: mongoose.Types.ObjectId
-  ) => Promise<WritingSchema[]>;
+  ) => Promise<WritingDocument[]>;
   findEditingByUserId: (
     userId: mongoose.Types.ObjectId
-  ) => Promise<WritingSchema[]>;
+  ) => Promise<WritingDocument[]>;
+  create: (writing: WritingSchema) => Promise<WritingDocument>;
 }
 
 export type WritingModel = Model<WritingDocument> & WritingRepository;

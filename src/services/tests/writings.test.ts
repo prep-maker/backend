@@ -7,24 +7,24 @@ import { useFailState, useSuccessState } from '../../utils/state';
 import WritingService from '../writing';
 
 describe('WritingService', () => {
-  describe('getByUserIdAndState', () => {
-    let writingService: WritingService;
-    const userId = '621cafb14ed8fbc8812e845c';
-    const objectId = mongoose.Types.ObjectId(userId);
-    beforeEach(() => {
-      const modelStub: WritingModel = mock();
-      when(modelStub.findAllByUserId(deepEqual(objectId))).thenResolve(
-        dummyWritings
-      );
-      when(modelStub.findDoneByUserId(deepEqual(objectId))).thenResolve(
-        dummyWritings.filter((writing) => writing.isDone)
-      );
-      when(modelStub.findEditingByUserId(deepEqual(objectId))).thenResolve(
-        dummyWritings.filter((writing) => !writing.isDone)
-      );
-      writingService = new WritingService(instance(modelStub));
-    });
+  let writingService: WritingService;
+  const userId = '621cafb14ed8fbc8812e845c';
+  const objectId = mongoose.Types.ObjectId(userId);
+  beforeEach(() => {
+    const modelStub: WritingModel = mock();
+    when(modelStub.findAllByUserId(deepEqual(objectId))).thenResolve(
+      dummyWritings as any
+    );
+    when(modelStub.findDoneByUserId(deepEqual(objectId))).thenResolve(
+      dummyWritings.filter((writing) => writing.isDone) as any
+    );
+    when(modelStub.findEditingByUserId(deepEqual(objectId))).thenResolve(
+      dummyWritings.filter((writing) => !writing.isDone) as any
+    );
+    writingService = new WritingService(instance(modelStub));
+  });
 
+  describe('getByUserIdAndState', () => {
     it('잘못된 형식의 userId가 입력되면 status 400의 FailState를 리턴한다.', async () => {
       const result = await writingService.getByUserIdAndState(
         'invalidId',
