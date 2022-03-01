@@ -57,5 +57,12 @@ userSchema.statics.createNewUser = async function (
   return newUser;
 };
 
+userSchema.statics.addWritings = async function (
+  userId: mongoose.Types.ObjectId,
+  writingId: mongoose.Types.ObjectId
+) {
+  await this.findByIdAndUpdate(userId, { writings: writingId });
+};
+
 const userModel = mongoose.model<UserDocument, UserModel>('User', userSchema);
 export default userModel;

@@ -24,6 +24,10 @@ export interface UserDocument extends UserSchema, Document {
 export interface UserRepository {
   findByEmail: (email: string) => Promise<UserDocument>;
   createNewUser: (user: UserAccount) => Promise<UserDocument>;
+  addWriting: (
+    userId: mongoose.Types.ObjectId,
+    writingId: mongoose.Types.ObjectId
+  ) => void;
 }
 
 export type UserModel = Model<UserDocument> & UserRepository;
