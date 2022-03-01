@@ -52,7 +52,7 @@ class WritingController implements IWritingController {
       return next(result);
     }
 
-    res.json(result.data);
+    res.status(201).json(result.data);
   };
 }
 
