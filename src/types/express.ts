@@ -6,4 +6,8 @@ export interface TypedRequestQueryAndParams<T extends Query, P extends Params>
   params: P;
 }
 
+export interface TypedRequestParams<T extends Params> extends Express.Request {
+  params: T;
+}
+
 export type StateQuery = 'editing' | 'done' | undefined;

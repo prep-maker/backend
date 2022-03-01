@@ -29,3 +29,4 @@ export const ValidatorsForGetWritings = [
   ...userIdChain,
   validate,
 ];
+export const userIdValidators = [...userIdChain, validate];

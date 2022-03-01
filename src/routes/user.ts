@@ -18,5 +18,6 @@ router.get(
   ValidatorsForGetWritings,
   writingController.getWritings
 );
+router.post('/:userId/writings', userIdValidators, writingController.create);
 
 export default router;
