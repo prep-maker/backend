@@ -22,6 +22,7 @@ interface IWritingController {
 
 class WritingController implements IWritingController {
   constructor(private readonly writingService: IWritingService) {}
+
   getWritings = async (
     req: TypedRequestQueryAndParams<{ state: StateQuery }, { userId: string }>,
     res: Response,
@@ -53,6 +54,24 @@ class WritingController implements IWritingController {
     }
 
     res.status(201).json(result.data);
+  };
+
+  remove = async (
+    req: TypedRequestParams<{ userId: string; writingId: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { userId, writingId } = req.params;
+    const result: BadState | void = await this.writingService.remove(
+      userId,
+      writingId
+    );
+
+    if (result?.state) {
+      return next(result);
+    }
+
+    res.status(204).json();
   };
 }
 
