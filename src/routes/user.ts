@@ -1,8 +1,9 @@
 import express from 'express';
 import WritingController from '../controllers/writing.js';
 import {
-  userIdValidators,
-  ValidatorsForGetWritings,
+  userAndWritingParamValidators,
+  userParamValidators,
+  validatorsForGetWritings,
 } from '../middlewares/validators/index.js';
 import blockModel from '../models/block.js';
 import userModel from '../models/user.js';
@@ -16,10 +17,14 @@ const writingController = new WritingController(writingService);
 
 router.get(
   '/:userId/writings',
-  ValidatorsForGetWritings,
+  validatorsForGetWritings,
   writingController.getWritings
 );
-router.post('/:userId/writings', userIdValidators, writingController.create);
-router.delete('/:userId/writings/:writingId', writingController.remove);
+router.post('/:userId/writings', userParamValidators, writingController.create);
+router.delete(
+  '/:userId/writings/:writingId',
+  userAndWritingParamValidators,
+  writingController.remove
+);
 
 export default router;
