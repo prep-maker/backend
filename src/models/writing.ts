@@ -47,6 +47,14 @@ writingSchema.statics.findEditingByUserId = async function (
   return writings;
 };
 
+writingSchema.statics.deleteById = async function (
+  writingId: string
+): Promise<mongoose.Types.ObjectId[]> {
+  const writing = await this.findByIdAndRemove(writingId);
+
+  return writing.blocks;
+};
+
 const writingModel = mongoose.model<WritingDocument, WritingModel>(
   'Writing',
   writingSchema

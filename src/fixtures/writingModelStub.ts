@@ -38,6 +38,10 @@ class WritingModelStub implements WritingRepository {
       title: writing.title,
       blocks: writing.blocks,
     } as any);
+
+  deleteById = async (
+    wrtingId: string
+  ): Promise<mongoose.Types.ObjectId[]> => [];
 }
 
 const getDocumentsByUserId = (userId: mongoose.Types.ObjectId) =>

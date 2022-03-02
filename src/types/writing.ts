@@ -27,6 +27,7 @@ export interface WritingRepository {
     userId: mongoose.Types.ObjectId
   ) => Promise<WritingDocument[]>;
   create: (writing: WritingSchema) => Promise<WritingDocument>;
+  deleteById: (id: string) => Promise<mongoose.Types.ObjectId[]>;
 }
 
 export type WritingModel = Model<WritingDocument> & WritingRepository;
