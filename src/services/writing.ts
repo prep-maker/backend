@@ -35,7 +35,7 @@ class WritingService implements IWritingService {
     state: StateQuery
   ): Promise<ResultState<WritingDocument[]>> => {
     if (!mongoose.isValidObjectId(userId)) {
-      return useFailState(ERROR.INVALID_ID, 400);
+      return useFailState(ERROR.INVALID_USER_ID, 400);
     }
 
     const id = mongoose.Types.ObjectId(userId);
@@ -53,7 +53,7 @@ class WritingService implements IWritingService {
 
   create = async (userId: string): Promise<ResultState<WritingResponse>> => {
     if (!mongoose.isValidObjectId(userId)) {
-      return useFailState(ERROR.INVALID_ID, 400);
+      return useFailState(ERROR.INVALID_USER_ID, 400);
     }
 
     const id = mongoose.Types.ObjectId(userId);
@@ -85,7 +85,7 @@ class WritingService implements IWritingService {
     if (
       !(mongoose.isValidObjectId(userId) && mongoose.isValidObjectId(writingId))
     ) {
-      return useFailState(ERROR.INVALID_ID, 400);
+      return useFailState(ERROR.INVALID_USER_ID, 400);
     }
 
     try {

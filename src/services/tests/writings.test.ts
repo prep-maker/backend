@@ -56,7 +56,7 @@ describe('WritingService', () => {
         undefined
       );
 
-      expect(result).toEqual(useFailState(ERROR.INVALID_ID, 400));
+      expect(result).toEqual(useFailState(ERROR.INVALID_USER_ID, 400));
     });
   });
 
@@ -80,7 +80,7 @@ describe('WritingService', () => {
     it('잘못된 형식의 userId가 입력되면 status 400의 FailState를 리턴한다.', async () => {
       const result = await writingService.create('invalidId');
 
-      expect(result).toEqual(useFailState(ERROR.INVALID_ID, 400));
+      expect(result).toEqual(useFailState(ERROR.INVALID_USER_ID, 400));
     });
   });
 });
