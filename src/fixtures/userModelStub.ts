@@ -14,7 +14,7 @@ class UserModelStub implements UserRepository {
       writings: [],
     } as any);
 
-  addWriting = (
+  addWriting = async (
     userId: mongoose.Types.ObjectId,
     writingId: mongoose.Types.ObjectId
   ) => {};
