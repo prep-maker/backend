@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { ERROR } from '../../constants/error';
+import BlockModelStub from '../../fixtures/blockModelStub';
 import dummyWritings from '../../fixtures/dummyWritings';
 import UserModelStub from '../../fixtures/userModelStub';
 import WritingModelStub from '../../fixtures/writingModelStub';
@@ -10,11 +11,17 @@ describe('WritingService', () => {
   let writingService: WritingService;
   let userModelStub: UserModelStub;
   let writingModelStub: WritingModelStub;
+  let blockModelStub: BlockModelStub;
   const userId = '621cafb14ed8fbc8812e845c';
+
   beforeEach(() => {
     writingModelStub = new WritingModelStub();
     userModelStub = new UserModelStub();
-    writingService = new WritingService(writingModelStub, userModelStub);
+    writingService = new WritingService(
+      writingModelStub,
+      userModelStub,
+      blockModelStub
+    );
   });
 
   describe('getByUserIdAndState', () => {
