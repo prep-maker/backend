@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { ERROR } from '../constants/error.js';
+import { BlockRepository } from '../types/block.js';
 import { StateQuery } from '../types/express.js';
 import { UserRepository } from '../types/user.js';
 import {
@@ -19,12 +20,14 @@ export interface IWritingService {
     state: StateQuery
   ) => Promise<ResultState<WritingDocument[]>>;
   create: (userId: string) => Promise<ResultState<WritingResponse>>;
+  remove: (userId: string, writingId: string) => Promise<void | BadState>;
 }
 
 class WritingService implements IWritingService {
   constructor(
     private readonly writingModel: WritingRepository,
-    private readonly userModel: UserRepository
+    private readonly userModel: UserRepository,
+    private readonly blockModel: BlockRepository
   ) {}
 
   getByUserIdAndState = async (
@@ -70,6 +73,27 @@ class WritingService implements IWritingService {
         title: 'Untitled',
         blocks: [],
       });
+    } catch (error) {
+      return useErrorState(error as Error);
+    }
+  };
+
+  remove = async (
+    userId: string,
+    writingId: string
+  ): Promise<void | BadState> => {
+    if (
+      !(mongoose.isValidObjectId(userId) && mongoose.isValidObjectId(writingId))
+    ) {
+      return useFailState(ERROR.INVALID_ID, 400);
+    }
+
+    try {
+      this.userModel.deleteWriting(userId, writingId);
+      const blockIds: mongoose.Types.ObjectId[] =
+        await this.writingModel.deleteById(writingId);
+      console.log(blockIds);
+      this.blockModel.deleteByIds(blockIds);
     } catch (error) {
       return useErrorState(error as Error);
     }
