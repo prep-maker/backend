@@ -20,5 +20,6 @@ router.get(
   writingController.getWritings
 );
 router.post('/:userId/writings', userIdValidators, writingController.create);
+router.delete('/:userId/writings/:writingId', writingController.remove);
 
 export default router;
