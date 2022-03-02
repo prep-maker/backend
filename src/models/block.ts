@@ -32,4 +32,4 @@ const blockModel = mongoose.model<BlockSchema, BlockModel>(
   blockSchema
 );
 
-export default blockSchema;
+export default blockModel;
