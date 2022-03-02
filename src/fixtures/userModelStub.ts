@@ -18,5 +18,7 @@ class UserModelStub implements UserRepository {
     userId: mongoose.Types.ObjectId,
     writingId: mongoose.Types.ObjectId
   ) => {};
+
+  deleteWriting = async (userId: string, writingId: string) => {};
 }
 export default UserModelStub;

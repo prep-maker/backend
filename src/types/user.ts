@@ -11,7 +11,7 @@ export type UserSchema = {
   readonly email: string;
   readonly name: string;
   password: string;
-  readonly writings: mongoose.Types.ObjectId[];
+  writings: mongoose.Types.ObjectId[];
 };
 
 export type UserAccount = Omit<UserSchema, 'writings'>;
@@ -28,6 +28,7 @@ export interface UserRepository {
     userId: mongoose.Types.ObjectId,
     writingId: mongoose.Types.ObjectId
   ) => void;
+  deleteWriting: (userId: string, writingId: string) => Promise<void>;
 }
 
 export type UserModel = Model<UserDocument> & UserRepository;

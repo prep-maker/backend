@@ -21,6 +21,7 @@ const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema({
   },
   writings: {
     type: [mongoose.Types.ObjectId],
+    default: [],
   },
 });
 
@@ -62,6 +63,13 @@ userSchema.statics.addWriting = async function (
   writingId: mongoose.Types.ObjectId
 ) {
   await this.findByIdAndUpdate(userId, { writings: writingId });
+};
+
+userSchema.statics.deleteWriting = async function (
+  userId: mongoose.Types.ObjectId,
+  writingId: mongoose.Types.ObjectId
+) {
+  await this.findByIdAndUpdate(userId, { $pull: { writings: writingId } });
 };
 
 const userModel = mongoose.model<UserDocument, UserModel>('User', userSchema);
