@@ -112,6 +112,28 @@ describe('WritingService', () => {
   });
 
   describe('update', () => {
-    it('잘못된 형식 userId나 writingId가 입력되면 status 400 FaliState를 리턴한다.', async () => {});
+    it('잘못된 형식 writingId가 입력되면 status 400 FaliState를 리턴한다.', async () => {
+      const result = await writingService.update(INVALID_ID, {
+        title: '',
+        isDone: false,
+      });
+
+      expect(result).toEqual(useFailState(ERROR.INVALID_WRITING_ID, 400));
+    });
+
+    it('요청대로 writing을 업데이트하고 업데이트된 writingId, isDone, title, blocks를 응답한다.', async () => {
+      const result = await writingService.update(WRITING_ID, {
+        title: 'update',
+        isDone: true,
+      });
+
+      const updated = {
+        writingId: mongoose.Types.ObjectId(WRITING_ID),
+        isDone: true,
+        title: 'update',
+        blocks: [],
+      };
+      expect(result).toEqual(useSuccessState(updated));
+    });
   });
 });

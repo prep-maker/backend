@@ -16,6 +16,11 @@ export type WritingResponse = {
 
 export interface WritingDocument extends WritingSchema, Document {}
 
+export type UpdateQuery = {
+  isDone: boolean;
+  title: string;
+};
+
 export interface WritingRepository {
   findAllByUserId: (
     userId: mongoose.Types.ObjectId
@@ -28,6 +33,7 @@ export interface WritingRepository {
   ) => Promise<WritingDocument[]>;
   create: (writing: WritingSchema) => Promise<WritingDocument>;
   deleteById: (id: string) => Promise<mongoose.Types.ObjectId[]>;
+  updateById: (id: string, query: UpdateQuery) => Promise<WritingDocument>;
 }
 
 export type WritingModel = Model<WritingDocument> & WritingRepository;
