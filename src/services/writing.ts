@@ -82,17 +82,18 @@ class WritingService implements IWritingService {
     userId: string,
     writingId: string
   ): Promise<void | BadState> => {
-    if (
-      !(mongoose.isValidObjectId(userId) && mongoose.isValidObjectId(writingId))
-    ) {
+    if (!mongoose.isValidObjectId(userId)) {
       return useFailState(ERROR.INVALID_USER_ID, 400);
+    }
+
+    if (!mongoose.isValidObjectId(writingId)) {
+      return useFailState(ERROR.INVALID_WRITING_ID, 400);
     }
 
     try {
       this.userModel.deleteWriting(userId, writingId);
       const blockIds: mongoose.Types.ObjectId[] =
         await this.writingModel.deleteById(writingId);
-      console.log(blockIds);
       this.blockModel.deleteByIds(blockIds);
     } catch (error) {
       return useErrorState(error as Error);
