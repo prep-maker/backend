@@ -22,6 +22,7 @@ const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema({
   writings: {
     type: [mongoose.Types.ObjectId],
     default: [],
+    ref: 'Writing',
   },
 });
 

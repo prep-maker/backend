@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import {
+  UpdateQuery,
   WritingDocument,
   WritingModel,
   WritingSchema,
@@ -20,13 +21,16 @@ const writingSchema: mongoose.Schema<WritingDocument> = new mongoose.Schema({
   },
   blocks: {
     type: [mongoose.Types.ObjectId],
+    ref: 'Block',
   },
 });
 
 writingSchema.statics.findAllByUserId = async function (
   userId: mongoose.Types.ObjectId
 ): Promise<WritingSchema[]> {
-  const writings = await this.find({ author: userId }).lean();
+  const writings = await this.find({ author: userId })
+    .populate('blocks')
+    .lean();
 
   return writings;
 };
@@ -34,7 +38,9 @@ writingSchema.statics.findAllByUserId = async function (
 writingSchema.statics.findDoneByUserId = async function (
   userId: mongoose.Types.ObjectId
 ): Promise<WritingSchema[]> {
-  const writings = await this.find({ author: userId, isDone: true }).lean();
+  const writings = await this.find({ author: userId, isDone: true })
+    .populate('blocks')
+    .lean();
 
   return writings;
 };
@@ -42,7 +48,9 @@ writingSchema.statics.findDoneByUserId = async function (
 writingSchema.statics.findEditingByUserId = async function (
   userId: mongoose.Types.ObjectId
 ): Promise<WritingSchema[]> {
-  const writings = await this.find({ author: userId, isDone: false }).lean();
+  const writings = await this.find({ author: userId, isDone: false })
+    .populate('blocks')
+    .lean();
 
   return writings;
 };
@@ -50,7 +58,7 @@ writingSchema.statics.findEditingByUserId = async function (
 writingSchema.statics.deleteById = async function (
   writingId: string
 ): Promise<mongoose.Types.ObjectId[]> {
-  const writing = await this.findByIdAndRemove(writingId);
+  const writing = await this.findByIdAndRemove(writingId).lean();
 
   return writing.blocks;
 };
