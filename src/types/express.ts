@@ -10,4 +10,10 @@ export interface TypedRequestParams<T extends Params> extends Express.Request {
   params: T;
 }
 
+export interface TypedRequestBodyAndParams<T, P extends Params>
+  extends Express.Request {
+  params: P;
+  body: T;
+}
+
 export type StateQuery = 'editing' | 'done' | undefined;

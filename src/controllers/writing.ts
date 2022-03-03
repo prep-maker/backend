@@ -2,10 +2,15 @@ import { NextFunction, Response } from 'express';
 import { IWritingService } from '../services/writing.js';
 import {
   StateQuery,
+  TypedRequestBodyAndParams,
   TypedRequestParams,
   TypedRequestQueryAndParams,
 } from '../types/express.js';
-import { WritingDocument, WritingResponse } from '../types/writing.js';
+import {
+  UpdateQuery,
+  WritingDocument,
+  WritingResponse,
+} from '../types/writing.js';
 
 interface IWritingController {
   getWritings: (
@@ -72,6 +77,23 @@ class WritingController implements IWritingController {
     }
 
     res.status(204).json();
+  };
+
+  update = async (
+    req: TypedRequestBodyAndParams<UpdateQuery, UserIdParam & WritingIdParam>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { writingId } = req.params;
+    const { title, isDone } = req.body;
+    const result: ResultState<WritingResponse> =
+      await this.writingService.update(writingId, { title, isDone });
+
+    if (result.state !== 'success') {
+      return next(result);
+    }
+
+    res.json(result.data);
   };
 }
 
