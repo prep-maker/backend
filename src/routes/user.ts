@@ -16,27 +16,19 @@ const router = express.Router();
 const writingService = new WritingService(writingModel, userModel, blockModel);
 const writingController = new WritingController(writingService);
 
-router.get(
-  '/:userId/writings',
-  validatorsForGetWritings,
-  writingController.getWritings
-);
+router
+  .route('/:userId/writings')
+  .get(validatorsForGetWritings, writingController.getWritings)
+  .post(userParamValidators, writingController.create);
 
-router.post('/:userId/writings', userParamValidators, writingController.create);
-
-router.delete(
-  '/:userId/writings/:writingId',
-  userParamValidators,
-  writingParamValidators,
-  writingController.remove
-);
-
-router.put(
-  '/:userId/writings/:writingId',
-  userParamValidators,
-  writingParamValidators,
-  writingBodyValidators,
-  writingController.update
-);
+router
+  .route('/:userId/writings/:writingId')
+  .delete(userParamValidators, writingParamValidators, writingController.remove)
+  .put(
+    userParamValidators,
+    writingParamValidators,
+    writingBodyValidators,
+    writingController.update
+  );
 
 export default router;
