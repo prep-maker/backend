@@ -40,7 +40,7 @@ blockSchema.statics.deleteByIds = async function (
 };
 
 const blockModel = mongoose.model<BlockSchema, BlockModel>(
-  'block',
+  'Block',
   blockSchema
 );
 
