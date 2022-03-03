@@ -1,3 +1,4 @@
+import { pipe } from '@fxts/core';
 import mongoose from 'mongoose';
 import { ERROR } from '../constants/error.js';
 import { BlockRepository } from '../types/block.js';
@@ -9,11 +10,8 @@ import {
   WritingRepository,
   WritingResponse,
 } from '../types/writing.js';
-import {
-  useErrorState,
-  useFailState,
-  useSuccessState,
-} from '../utils/state.js';
+import catchError from '../utils/catchError.js';
+import { useFailState, useSuccessState } from '../utils/state.js';
 
 export interface IWritingService {
   getByUserIdAndState: (
@@ -34,6 +32,32 @@ class WritingService implements IWritingService {
     private readonly userModel: UserRepository,
     private readonly blockModel: BlockRepository
   ) {}
+
+  getByUserIdAndState = async (
+    userId: string,
+    state: StateQuery
+  ): Promise<ResultState<WritingDocument[]>> => {
+    if (!mongoose.isValidObjectId(userId)) {
+      return useFailState(ERROR.INVALID_USER_ID, 400);
+    }
+
+    const id = mongoose.Types.ObjectId(userId);
+    const result = await pipe(
+      this.getWritings.bind(this, id, state),
+      catchError
+    );
+
+    return result;
+  };
+
+  getWritings = async (id: mongoose.Types.ObjectId, state: StateQuery) => {
+    const writings: WritingDocument[] = await this.findByUserIdAndState(
+      id,
+      state
+    );
+
+    return useSuccessState(writings);
+  };
 
   private findByUserIdAndState = async (
     userId: mongoose.Types.ObjectId,
@@ -58,52 +82,35 @@ class WritingService implements IWritingService {
     }
   };
 
-  getByUserIdAndState = async (
-    userId: string,
-    state: StateQuery
-  ): Promise<ResultState<WritingDocument[]>> => {
-    if (!mongoose.isValidObjectId(userId)) {
-      return useFailState(ERROR.INVALID_USER_ID, 400);
-    }
-
-    const id = mongoose.Types.ObjectId(userId);
-
-    try {
-      const writings: WritingDocument[] = await this.findByUserIdAndState(
-        id,
-        state
-      );
-      return useSuccessState(writings);
-    } catch (error) {
-      return useErrorState(error as Error);
-    }
-  };
-
   create = async (userId: string): Promise<ResultState<WritingResponse>> => {
     if (!mongoose.isValidObjectId(userId)) {
       return useFailState(ERROR.INVALID_USER_ID, 400);
     }
 
     const id = mongoose.Types.ObjectId(userId);
+    const result = await pipe(this.createNewWriting.bind(this, id), catchError);
 
-    try {
-      const newWriting: WritingDocument = await this.writingModel.create({
-        isDone: false,
-        author: id,
-        title: 'Untitled',
-        blocks: [],
-      });
-      this.userModel.addWriting(id, newWriting._id);
+    return result;
+  };
 
-      return useSuccessState({
-        writingId: newWriting._id,
-        isDone: false,
-        title: 'Untitled',
-        blocks: [],
-      });
-    } catch (error) {
-      return useErrorState(error as Error);
-    }
+  createNewWriting = async (
+    userId: mongoose.Types.ObjectId
+  ): Promise<ResultState<WritingResponse>> => {
+    const initial = {
+      isDone: false,
+      author: userId,
+      title: 'Untitled',
+      blocks: [],
+    };
+    const newWriting: WritingDocument = await this.writingModel.create(initial);
+    this.userModel.addWriting(userId, newWriting._id);
+
+    return useSuccessState({
+      writingId: newWriting._id,
+      isDone: false,
+      title: 'Untitled',
+      blocks: [],
+    });
   };
 
   remove = async (
@@ -118,14 +125,19 @@ class WritingService implements IWritingService {
       return useFailState(ERROR.INVALID_WRITING_ID, 400);
     }
 
-    try {
-      this.userModel.deleteWriting(userId, writingId);
-      const blockIds: mongoose.Types.ObjectId[] =
-        await this.writingModel.deleteById(writingId);
-      this.blockModel.deleteByIds(blockIds);
-    } catch (error) {
-      return useErrorState(error as Error);
-    }
+    const result = await pipe(
+      this.removeWriting.bind(this, userId, writingId),
+      catchError
+    );
+
+    return result;
+  };
+
+  removeWriting = async (userId: string, writingId: string): Promise<void> => {
+    this.userModel.deleteWriting(userId, writingId);
+    const blockIds: mongoose.Types.ObjectId[] =
+      await this.writingModel.deleteById(writingId);
+    this.blockModel.deleteByIds(blockIds);
   };
 
   update = async (
@@ -136,22 +148,30 @@ class WritingService implements IWritingService {
       return useFailState(ERROR.INVALID_WRITING_ID, 400);
     }
 
-    try {
-      const updated: WritingDocument = await this.writingModel.updateById(
-        writingId,
-        query
-      );
-      const { _id, isDone, title, blocks } = updated;
+    const result = await pipe(
+      this.updateWriting.bind(this, writingId, query),
+      catchError
+    );
 
-      return useSuccessState({
-        writingId: _id,
-        isDone,
-        title,
-        blocks,
-      });
-    } catch (error) {
-      return useErrorState(error as Error);
-    }
+    return result;
+  };
+
+  updateWriting = async (
+    writingId: string,
+    query: UpdateQuery
+  ): Promise<ResultState<WritingResponse>> => {
+    const updated: WritingDocument = await this.writingModel.updateById(
+      writingId,
+      query
+    );
+    const { _id, isDone, title, blocks } = updated;
+
+    return useSuccessState({
+      writingId: _id,
+      isDone,
+      title,
+      blocks,
+    });
   };
 }
 
