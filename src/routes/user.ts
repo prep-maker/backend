@@ -26,5 +26,6 @@ router.delete(
   userAndWritingParamValidators,
   writingController.remove
 );
+router.put('/:userId/writings/:writingId', writingController.update);
 
 export default router;
