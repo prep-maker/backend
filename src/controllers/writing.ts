@@ -12,14 +12,27 @@ import {
   WritingResponse,
 } from '../types/writing.js';
 
+type UserIdParam = { userId: string };
+type WritingIdParam = { writingId: string };
+
 interface IWritingController {
   getWritings: (
-    req: TypedRequestQueryAndParams<{ state: StateQuery }, { userId: string }>,
+    req: TypedRequestQueryAndParams<{ state: StateQuery }, UserIdParam>,
     res: Response,
     next: NextFunction
   ) => Promise<void>;
   create: (
-    req: TypedRequestParams<{ userId: string }>,
+    req: TypedRequestParams<UserIdParam>,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  remove: (
+    req: TypedRequestParams<UserIdParam & WritingIdParam>,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  update: (
+    req: TypedRequestBodyAndParams<UpdateQuery, UserIdParam & WritingIdParam>,
     res: Response,
     next: NextFunction
   ) => Promise<void>;
@@ -29,7 +42,7 @@ class WritingController implements IWritingController {
   constructor(private readonly writingService: IWritingService) {}
 
   getWritings = async (
-    req: TypedRequestQueryAndParams<{ state: StateQuery }, { userId: string }>,
+    req: TypedRequestQueryAndParams<{ state: StateQuery }, UserIdParam>,
     res: Response,
     next: NextFunction
   ) => {
@@ -46,7 +59,7 @@ class WritingController implements IWritingController {
   };
 
   create = async (
-    req: TypedRequestParams<{ userId: string }>,
+    req: TypedRequestParams<UserIdParam>,
     res: Response,
     next: NextFunction
   ) => {
@@ -62,7 +75,7 @@ class WritingController implements IWritingController {
   };
 
   remove = async (
-    req: TypedRequestParams<{ userId: string; writingId: string }>,
+    req: TypedRequestParams<UserIdParam & WritingIdParam>,
     res: Response,
     next: NextFunction
   ) => {
