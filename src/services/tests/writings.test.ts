@@ -14,6 +14,7 @@ describe('WritingService', () => {
   let blockModelStub: BlockModelStub;
   const USER_ID = '621cafb14ed8fbc8812e845c';
   const WRITING_ID = '621cb0b250e465dfac337175';
+  const INVALID_ID = 'invalid id';
 
   beforeEach(() => {
     writingModelStub = new WritingModelStub();
@@ -39,9 +40,8 @@ describe('WritingService', () => {
     it('state 매개변수에 "done"이 입력되면 isDone이 true인 writing 다큐먼트를 SuccessState로 리턴한다', async () => {
       const result = await writingService.getByUserIdAndState(USER_ID, 'done');
 
-      expect(result).toEqual(
-        useSuccessState(dummyWritings.filter((writing) => writing.isDone))
-      );
+      const done = dummyWritings.filter((writing) => writing.isDone);
+      expect(result).toEqual(useSuccessState(done));
     });
 
     it('state 매개변수에 "editing"이 입력되면 isDone이 false인 writing 다큐먼트를 SuccessState로 리턴한다', async () => {
@@ -56,7 +56,7 @@ describe('WritingService', () => {
 
     it('잘못된 형식의 userId가 입력되면 status 400의 FailState를 리턴한다.', async () => {
       const result = await writingService.getByUserIdAndState(
-        'invalidId',
+        INVALID_ID,
         undefined
       );
 
@@ -70,38 +70,29 @@ describe('WritingService', () => {
 
       const result = await writingService.create(USER_ID);
 
+      const newWriting = {
+        writingId: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
+        isDone: false,
+        title: 'Untitled',
+        blocks: [],
+      };
       expect(spy).toHaveBeenCalled();
-      expect(result).toEqual(
-        useSuccessState({
-          writingId: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
-          isDone: false,
-          title: 'Untitled',
-          blocks: [],
-        })
-      );
+      expect(result).toEqual(useSuccessState(newWriting));
     });
 
     it('잘못된 형식의 userId가 입력되면 status 400 FailState를 리턴한다.', async () => {
-      const result = await writingService.create('invalidId');
+      const result = await writingService.create(INVALID_ID);
 
       expect(result).toEqual(useFailState(ERROR.INVALID_USER_ID, 400));
     });
   });
 
   describe('remove', () => {
-    it('잘못된 형식 userId나 writingId가 입력되면 status 400 FaliState를 리턴한다', async () => {
-      const invalidUserId = await writingService.remove(
-        'invalidId',
-        '621cb0b250e465dfac337175'
-      );
+    it('잘못된 형식 userId나 writingId가 입력되면 status 400 FaliState를 리턴한다.', async () => {
+      const invalidUserId = await writingService.remove(INVALID_ID, WRITING_ID);
+      const invalidWritingId = await writingService.remove(USER_ID, INVALID_ID);
 
       expect(invalidUserId).toEqual(useFailState(ERROR.INVALID_USER_ID, 400));
-
-      const invalidWritingId = await writingService.remove(
-        '621cb0b250e465dfac337175',
-        'invalidId'
-      );
-
       expect(invalidWritingId).toEqual(
         useFailState(ERROR.INVALID_WRITING_ID, 400)
       );
@@ -118,5 +109,9 @@ describe('WritingService', () => {
       expect(writingSpy).toBeCalledWith(WRITING_ID);
       expect(blockSpy).toBeCalledWith(['blockId1', 'blockId2']);
     });
+  });
+
+  describe('update', () => {
+    it('잘못된 형식 userId나 writingId가 입력되면 status 400 FaliState를 리턴한다.', async () => {});
   });
 });
