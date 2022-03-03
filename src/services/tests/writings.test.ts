@@ -45,11 +45,13 @@ describe('WritingService', () => {
     });
 
     it('state 매개변수에 "editing"이 입력되면 isDone이 false인 writing 다큐먼트를 SuccessState로 리턴한다', async () => {
-      const result = await writingService.getByUserIdAndState(USER_ID, 'done');
-
-      expect(result).toEqual(
-        useSuccessState(dummyWritings.filter((writing) => writing.isDone))
+      const result = await writingService.getByUserIdAndState(
+        USER_ID,
+        'editing'
       );
+
+      const editing = dummyWritings.filter((writing) => !writing.isDone);
+      expect(result).toEqual(useSuccessState(editing));
     });
 
     it('잘못된 형식의 userId가 입력되면 status 400의 FailState를 리턴한다.', async () => {
