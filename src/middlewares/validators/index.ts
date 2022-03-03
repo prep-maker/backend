@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { useFailState } from '../../utils/state.js';
+import { writingBodyChain } from './body.js';
 import { userIdChain, writingIdChain } from './params.js';
 import stateQueryChain from './query.js';
 import signinChain from './signin.js';
@@ -31,3 +32,4 @@ export const validatorsForGetWritings = [
 ];
 export const userParamValidators = [...userIdChain, validate];
 export const writingParamValidators = [...writingIdChain, validate];
+export const writingBodyValidators = [...writingBodyChain, validate];

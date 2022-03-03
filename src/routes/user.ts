@@ -3,6 +3,7 @@ import WritingController from '../controllers/writing.js';
 import {
   userParamValidators,
   validatorsForGetWritings,
+  writingBodyValidators,
   writingParamValidators,
 } from '../middlewares/validators/index.js';
 import blockModel from '../models/block.js';
@@ -29,6 +30,13 @@ router.delete(
   writingParamValidators,
   writingController.remove
 );
-router.put('/:userId/writings/:writingId', writingController.update);
+
+router.put(
+  '/:userId/writings/:writingId',
+  userParamValidators,
+  writingParamValidators,
+  writingBodyValidators,
+  writingController.update
+);
 
 export default router;
