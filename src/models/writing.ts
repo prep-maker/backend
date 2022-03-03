@@ -55,6 +55,19 @@ writingSchema.statics.deleteById = async function (
   return writing.blocks;
 };
 
+writingSchema.statics.updateById = async function (
+  writingId: string,
+  query: UpdateQuery
+): Promise<mongoose.Types.ObjectId[]> {
+  const writing = await this.findByIdAndUpdate(writingId, query, {
+    new: true,
+  })
+    .populate('blocks')
+    .lean();
+
+  return writing;
+};
+
 const writingModel = mongoose.model<WritingDocument, WritingModel>(
   'Writing',
   writingSchema
