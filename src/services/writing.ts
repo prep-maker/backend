@@ -50,7 +50,10 @@ class WritingService implements IWritingService {
     return result;
   };
 
-  getWritings = async (id: mongoose.Types.ObjectId, state: StateQuery) => {
+  private getWritings = async (
+    id: mongoose.Types.ObjectId,
+    state: StateQuery
+  ) => {
     const writings: WritingDocument[] = await this.findByUserIdAndState(
       id,
       state
@@ -93,7 +96,7 @@ class WritingService implements IWritingService {
     return result;
   };
 
-  createNewWriting = async (
+  private createNewWriting = async (
     userId: mongoose.Types.ObjectId
   ): Promise<ResultState<WritingResponse>> => {
     const initial = {
@@ -133,7 +136,10 @@ class WritingService implements IWritingService {
     return result;
   };
 
-  removeWriting = async (userId: string, writingId: string): Promise<void> => {
+  private removeWriting = async (
+    userId: string,
+    writingId: string
+  ): Promise<void> => {
     this.userModel.deleteWriting(userId, writingId);
     const blockIds: mongoose.Types.ObjectId[] =
       await this.writingModel.deleteById(writingId);
@@ -156,7 +162,7 @@ class WritingService implements IWritingService {
     return result;
   };
 
-  updateWriting = async (
+  private updateWriting = async (
     writingId: string,
     query: UpdateQuery
   ): Promise<ResultState<WritingResponse>> => {
