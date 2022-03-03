@@ -1,9 +1,9 @@
 import express from 'express';
 import WritingController from '../controllers/writing.js';
 import {
-  userAndWritingParamValidators,
   userParamValidators,
   validatorsForGetWritings,
+  writingParamValidators,
 } from '../middlewares/validators/index.js';
 import blockModel from '../models/block.js';
 import userModel from '../models/user.js';
@@ -20,10 +20,13 @@ router.get(
   validatorsForGetWritings,
   writingController.getWritings
 );
+
 router.post('/:userId/writings', userParamValidators, writingController.create);
+
 router.delete(
   '/:userId/writings/:writingId',
-  userAndWritingParamValidators,
+  userParamValidators,
+  writingParamValidators,
   writingController.remove
 );
 router.put('/:userId/writings/:writingId', writingController.update);

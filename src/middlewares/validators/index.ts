@@ -30,8 +30,4 @@ export const validatorsForGetWritings = [
   validate,
 ];
 export const userParamValidators = [...userIdChain, validate];
-export const userAndWritingParamValidators = [
-  ...userIdChain,
-  ...writingIdChain,
-  validate,
-];
+export const writingParamValidators = [...writingIdChain, validate];
