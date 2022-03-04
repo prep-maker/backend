@@ -17,7 +17,7 @@ export interface IWritingService {
   getByUserIdAndState: (
     userId: string,
     state: StateQuery
-  ) => Promise<ResultState<WritingDocument[]>>;
+  ) => Promise<ResultState<WritingResponse[]>>;
   create: (userId: string) => Promise<ResultState<WritingResponse>>;
   remove: (userId: string, writingId: string) => Promise<void | BadState>;
   update: (
@@ -36,7 +36,7 @@ class WritingService implements IWritingService {
   getByUserIdAndState = async (
     userId: string,
     state: StateQuery
-  ): Promise<ResultState<WritingDocument[]>> => {
+  ): Promise<ResultState<WritingResponse[]>> => {
     if (!mongoose.isValidObjectId(userId)) {
       return useFailState(ERROR.INVALID_USER_ID, 400);
     }
@@ -53,13 +53,19 @@ class WritingService implements IWritingService {
   private getWritings = async (
     id: mongoose.Types.ObjectId,
     state: StateQuery
-  ) => {
+  ): Promise<SuccessState<WritingResponse[]>> => {
     const writings: WritingDocument[] = await this.findByUserIdAndState(
       id,
       state
     );
+    const result: WritingResponse[] = writings.map((writing) => ({
+      writingId: writing._id,
+      isDone: writing.isDone,
+      title: writing.title,
+      blocks: writing.blocks,
+    }));
 
-    return useSuccessState(writings);
+    return useSuccessState(result);
   };
 
   private findByUserIdAndState = async (

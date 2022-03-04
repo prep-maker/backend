@@ -6,11 +6,7 @@ import {
   TypedRequestParams,
   TypedRequestQueryAndParams,
 } from '../types/express.js';
-import {
-  UpdateQuery,
-  WritingDocument,
-  WritingResponse,
-} from '../types/writing.js';
+import { UpdateQuery, WritingResponse } from '../types/writing.js';
 
 type UserIdParam = { userId: string };
 type WritingIdParam = { writingId: string };
@@ -48,7 +44,7 @@ class WritingController implements IWritingController {
   ) => {
     const userId: string = req.params.userId;
     const state: StateQuery = req.query.state;
-    const result: ResultState<WritingDocument[]> =
+    const result: ResultState<WritingResponse[]> =
       await this.writingService.getByUserIdAndState(userId, state);
 
     if (result.state !== 'success') {
