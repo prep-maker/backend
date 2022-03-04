@@ -8,7 +8,7 @@ export type WritingSchema = {
 };
 
 export type WritingResponse = {
-  readonly writingId: mongoose.Types.ObjectId;
+  readonly id: mongoose.Types.ObjectId;
   readonly isDone: boolean;
   readonly title: string;
   readonly blocks?: mongoose.Types.ObjectId[];

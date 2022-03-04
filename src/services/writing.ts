@@ -59,7 +59,7 @@ class WritingService implements IWritingService {
       state
     );
     const result: WritingResponse[] = writings.map((writing) => ({
-      writingId: writing._id,
+      id: writing._id,
       isDone: writing.isDone,
       title: writing.title,
       blocks: writing.blocks,
@@ -115,7 +115,7 @@ class WritingService implements IWritingService {
     this.userModel.addWriting(userId, newWriting._id);
 
     return useSuccessState({
-      writingId: newWriting._id,
+      id: newWriting._id,
       isDone: false,
       title: 'Untitled',
       blocks: [],
@@ -179,7 +179,7 @@ class WritingService implements IWritingService {
     const { _id, isDone, title, blocks } = updated;
 
     return useSuccessState({
-      writingId: _id,
+      id: _id,
       isDone,
       title,
       blocks,
