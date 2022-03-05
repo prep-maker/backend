@@ -2,7 +2,6 @@ import { filter, pipe, toArray } from '@fxts/core';
 import mongoose from 'mongoose';
 import { ObjectId } from '../common/types/mongoose';
 import {
-  UpdateQuery,
   WritingDocument,
   WritingRepository,
   WritingSchema,
@@ -43,14 +42,14 @@ class WritingModelStub implements WritingRepository {
 
   updateById = async (
     id: string,
-    query: UpdateQuery
+    query: Partial<WritingSchema>
   ): Promise<WritingDocument> =>
     ({
       _id: mongoose.Types.ObjectId(id),
       isDone: query.isDone,
       author: 'author',
       title: query.title,
-      blocks: [],
+      blocks: query.blocks ?? [],
     } as any);
 }
 

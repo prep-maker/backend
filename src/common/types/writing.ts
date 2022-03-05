@@ -28,7 +28,10 @@ export interface WritingRepository {
   findEditingByUserId: (userId: ObjectId) => Promise<WritingDocument[]>;
   create: (writing: WritingSchema) => Promise<WritingDocument>;
   deleteById: (id: string) => Promise<ObjectId[]>;
-  updateById: (id: string, query: UpdateQuery) => Promise<WritingDocument>;
+  updateById: (
+    id: string,
+    query: Partial<WritingSchema>
+  ) => Promise<WritingDocument>;
 }
 
 export type WritingModel = Model<WritingDocument> & WritingRepository;

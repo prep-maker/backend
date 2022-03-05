@@ -1,9 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 import { ObjectId } from '../common/types/mongoose.js';
 import {
-  UpdateQuery,
   WritingDocument,
   WritingModel,
+  WritingSchema,
 } from '../common/types/writing.js';
 
 const writingSchema: Schema<WritingDocument> = new mongoose.Schema({
@@ -73,7 +73,7 @@ writingSchema.statics.deleteById = async function (
 
 writingSchema.statics.updateById = async function (
   writingId: string,
-  query: UpdateQuery
+  query: Partial<WritingSchema>
 ): Promise<WritingDocument> {
   const writing: WritingDocument = await this.findByIdAndUpdate(
     writingId,
