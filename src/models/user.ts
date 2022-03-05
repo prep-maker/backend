@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import mongoose, { Schema } from 'mongoose';
 import config from '../config/index.js';
-import { ObjectId } from '../types/mongoose.js';
 import { UserAccount, UserDocument, UserModel } from '../types/user.js';
 import { validateUnique } from '../utils/db.js';
 
@@ -61,15 +60,15 @@ userSchema.statics.createNewUser = async function (
 };
 
 userSchema.statics.addWriting = async function (
-  userId: ObjectId,
-  writingId: ObjectId
+  userId: string,
+  writingId: string
 ) {
   await this.findByIdAndUpdate(userId, { writings: writingId });
 };
 
 userSchema.statics.deleteWriting = async function (
-  userId: ObjectId,
-  writingId: ObjectId
+  userId: string,
+  writingId: string
 ) {
   await this.findByIdAndUpdate(userId, { $pull: { writings: writingId } });
 };

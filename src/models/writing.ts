@@ -4,7 +4,6 @@ import {
   UpdateQuery,
   WritingDocument,
   WritingModel,
-  WritingSchema,
 } from '../types/writing.js';
 
 const writingSchema: Schema<WritingDocument> = new mongoose.Schema({
@@ -27,9 +26,9 @@ const writingSchema: Schema<WritingDocument> = new mongoose.Schema({
 });
 
 writingSchema.statics.findAllByUserId = async function (
-  userId: ObjectId
-): Promise<WritingSchema[]> {
-  const writings = await this.find({ author: userId })
+  userId: string
+): Promise<WritingDocument[]> {
+  const writings: WritingDocument[] = await this.find({ author: userId })
     .populate('blocks')
     .lean();
 
@@ -37,9 +36,12 @@ writingSchema.statics.findAllByUserId = async function (
 };
 
 writingSchema.statics.findDoneByUserId = async function (
-  userId: ObjectId
-): Promise<WritingSchema[]> {
-  const writings = await this.find({ author: userId, isDone: true })
+  userId: string
+): Promise<WritingDocument[]> {
+  const writings: WritingDocument[] = await this.find({
+    author: userId,
+    isDone: true,
+  })
     .populate('blocks')
     .lean();
 
@@ -47,9 +49,12 @@ writingSchema.statics.findDoneByUserId = async function (
 };
 
 writingSchema.statics.findEditingByUserId = async function (
-  userId: ObjectId
-): Promise<WritingSchema[]> {
-  const writings = await this.find({ author: userId, isDone: false })
+  userId: string
+): Promise<WritingDocument[]> {
+  const writings: WritingDocument[] = await this.find({
+    author: userId,
+    isDone: false,
+  })
     .populate('blocks')
     .lean();
 
@@ -59,7 +64,9 @@ writingSchema.statics.findEditingByUserId = async function (
 writingSchema.statics.deleteById = async function (
   writingId: string
 ): Promise<ObjectId[]> {
-  const writing = await this.findByIdAndRemove(writingId).lean();
+  const writing: WritingDocument = await this.findByIdAndRemove(
+    writingId
+  ).lean();
 
   return writing.blocks;
 };
@@ -67,10 +74,14 @@ writingSchema.statics.deleteById = async function (
 writingSchema.statics.updateById = async function (
   writingId: string,
   query: UpdateQuery
-): Promise<ObjectId[]> {
-  const writing = await this.findByIdAndUpdate(writingId, query, {
-    new: true,
-  })
+): Promise<WritingDocument> {
+  const writing: WritingDocument = await this.findByIdAndUpdate(
+    writingId,
+    query,
+    {
+      new: true,
+    }
+  )
     .populate('blocks')
     .lean();
 

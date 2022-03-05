@@ -39,9 +39,8 @@ class WritingService implements IWritingService {
       return useFailState(ERROR.INVALID_USER_ID, 400);
     }
 
-    const id = mongoose.Types.ObjectId(userId);
     const result = await pipe(
-      this.getWritings.bind(this, id, state),
+      this.getWritings.bind(this, userId, state),
       catchError
     );
 
@@ -49,11 +48,11 @@ class WritingService implements IWritingService {
   };
 
   private getWritings = async (
-    id: mongoose.Types.ObjectId,
+    userId: string,
     state: StateQuery
   ): Promise<SuccessState<WritingResponse[]>> => {
     const writings: WritingDocument[] = await this.findByUserIdAndState(
-      id,
+      userId,
       state
     );
     const result: WritingResponse[] = writings.map((writing) => ({
@@ -67,7 +66,7 @@ class WritingService implements IWritingService {
   };
 
   private findByUserIdAndState = async (
-    userId: ObjectId,
+    userId: string,
     state: StateQuery
   ): Promise<WritingDocument[]> => {
     let result: WritingDocument[];
@@ -100,7 +99,7 @@ class WritingService implements IWritingService {
     return result;
   };
 
-  private createNewWriting = async (userId: ObjectId): WritingResult => {
+  private createNewWriting = async (userId: string): WritingResult => {
     const initial = {
       isDone: false,
       author: userId,
