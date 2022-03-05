@@ -5,6 +5,7 @@ import {
   paramsValidator,
   userParamValidators,
   validatorsForCreateBlock,
+  validatorsForDeleteBlock,
   validatorsForGetWritings,
   validatorsForUpdateWriting,
 } from '../middlewares/validators/index.js';
@@ -46,5 +47,9 @@ const blockController = new BlockController(blockPresenter);
 router
   .route('/:userId/writings/:writingId/blocks')
   .post(validatorsForCreateBlock, blockController.create);
+
+router
+  .route('/:userId/writings/:writingId/blocks/:blockId')
+  .delete(validatorsForDeleteBlock, blockController.remove);
 
 export default router;

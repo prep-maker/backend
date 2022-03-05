@@ -12,6 +12,7 @@ type BlockResult = Promise<ResultState<BlockSchema & { id: ObjectId }>>;
 
 export interface IBlockPresenter {
   create: (writingId: string, block: BlockSchema) => BlockResult;
+  remove: (writingId: string, blockId: string) => Promise<BadState | void>;
 }
 
 class BlockPresenter implements IBlockPresenter {
@@ -37,6 +38,23 @@ class BlockPresenter implements IBlockPresenter {
 
     const result = await pipe(
       this.blockService.create.bind(this, writingId, block),
+      catchError
+    );
+
+    return result;
+  };
+
+  remove = async (writingId: string, blockId: string) => {
+    if (!mongoose.isValidObjectId(writingId)) {
+      return useFailState(ERROR.INVALID_WRITING_ID, 400);
+    }
+
+    if (!mongoose.isValidObjectId(blockId)) {
+      return useFailState(ERROR.INVALID_BLOCK_ID, 400);
+    }
+
+    const result = await pipe(
+      this.blockService.remove.bind(this, writingId, blockId),
       catchError
     );
 

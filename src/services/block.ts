@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import {
   BlockDocument,
   BlockRepository,
@@ -11,9 +12,10 @@ type BlockResult = Promise<SuccessState<BlockSchema & { id: ObjectId }>>;
 
 export interface IBlockService {
   create: (writingId: string, block: BlockSchema) => BlockResult;
+  remove: (writingId: string, blockId: string) => Promise<void>;
 }
 
-class BlockService {
+class BlockService implements IBlockService {
   constructor(
     private readonly blockModel: BlockRepository,
     private readonly writingModel: WritingRepository
@@ -30,6 +32,12 @@ class BlockService {
     };
 
     return useSuccessState(result);
+  };
+
+  remove = async (writingId: string, blockId: string) => {
+    const id = mongoose.Types.ObjectId(blockId);
+    this.blockModel.deleteByIds([id]);
+    this.writingModel.updateById(writingId, { $pull: { blocks: blockId } });
   };
 }
 

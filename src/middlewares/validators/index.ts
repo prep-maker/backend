@@ -7,7 +7,7 @@ import {
   signupBodyChain,
   writingBodyChain,
 } from './body.js';
-import { userIdChain, writingIdChain } from './params.js';
+import { blockIdChain, userIdChain, writingIdChain } from './params.js';
 import stateQueryChain from './query.js';
 
 const validate = (
@@ -46,5 +46,11 @@ export const validatorsForCreateBlock = [
   ...userIdChain,
   ...writingIdChain,
   ...blockBodyChain,
+  validate,
+];
+export const validatorsForDeleteBlock = [
+  ...userIdChain,
+  ...writingIdChain,
+  ...blockIdChain,
   validate,
 ];

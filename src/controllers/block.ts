@@ -2,6 +2,7 @@ import { NextFunction, Response } from 'express';
 import { BlockSchema } from '../common/types/block.js';
 import {
   TypedRequestBodyAndParams,
+  TypedRequestParams,
   UserIdParam,
   WritingIdParam,
 } from '../common/types/express.js';
@@ -18,6 +19,7 @@ interface IBlockController {
 
 class BlockController implements IBlockController {
   constructor(private readonly blockPresenter: IBlockPresenter) {}
+
   create = async (
     req: TypedRequestBodyAndParams<BlockSchema, UserIdParam & WritingIdParam>,
     res: Response,
@@ -32,7 +34,22 @@ class BlockController implements IBlockController {
       return next(result);
     }
 
-    res.json(result.data);
+    res.status(201).json(result.data);
+  };
+
+  remove = async (
+    req: TypedRequestParams<{ writingId: string; blockId: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { writingId, blockId } = req.params;
+    const result = await this.blockPresenter.remove(writingId, blockId);
+
+    if (result?.state) {
+      return next(result);
+    }
+
+    res.sendStatus(204);
   };
 }
 
