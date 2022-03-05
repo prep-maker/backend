@@ -38,4 +38,34 @@ describe('BlockPresenter', () => {
       expect(result).toEqual(useFailState(ERROR.INVALID_WRITING_ID, 400));
     });
   });
+
+  describe('remove', () => {
+    it('block 다큐먼트와 관련된 writing 다큐먼트에서 해당 block id를 지운다.', async () => {
+      const spyBlock = jest.spyOn(blockModel, 'deleteByIds');
+      const spyWriting = jest.spyOn(writingModel, 'updateById');
+
+      await blockPresenter.remove(WRITING_ID, BLOCK_ID);
+
+      expect(spyBlock).toBeCalledWith([BLOCK_ID]);
+      expect(spyWriting).toBeCalledWith(WRITING_ID, {
+        $pull: { blocks: BLOCK_ID },
+      });
+    });
+
+    it('잘못된 형식의 writingId나 blockId가 입력되면 status 400의 FailState를 리턴한다.', async () => {
+      const invalidWritingId = await blockPresenter.remove(
+        'invalid id',
+        BLOCK_ID
+      );
+      const invalidBlockId = await blockPresenter.remove(
+        WRITING_ID,
+        'invalid id'
+      );
+
+      expect(invalidWritingId).toEqual(
+        useFailState(ERROR.INVALID_WRITING_ID, 400)
+      );
+      expect(invalidBlockId).toEqual(useFailState(ERROR.INVALID_BLOCK_ID, 400));
+    });
+  });
 });
