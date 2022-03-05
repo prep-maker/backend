@@ -1,11 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { useFailState } from '../../common/utils/state.js';
-import { writingBodyChain } from './body.js';
+import { signinBodyChain, signupBodyChain, writingBodyChain } from './body.js';
 import { userIdChain, writingIdChain } from './params.js';
 import stateQueryChain from './query.js';
-import signinChain from './signin.js';
-import signupChain from './signup.js';
 
 const validate = (
   req: Request,
@@ -23,8 +21,8 @@ const validate = (
   return next(useFailState(error.message, error.status));
 };
 
-export const signupValidators = [...signupChain, validate];
-export const signinValidators = [...signinChain, validate];
+export const signupValidators = [...signupBodyChain, validate];
+export const signinValidators = [...signinBodyChain, validate];
 
 export const userParamValidators = [...userIdChain, validate];
 export const validatorsForGetWritings = [
