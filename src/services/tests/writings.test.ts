@@ -4,6 +4,8 @@ import BlockModelStub from '../../fixtures/blockModelStub';
 import dummyWritings from '../../fixtures/dummyWritings';
 import UserModelStub from '../../fixtures/userModelStub';
 import WritingModelStub from '../../fixtures/writingModelStub';
+import { ObjectId } from '../../types/mongoose';
+import { WritingSchema } from '../../types/writing';
 import { useFailState, useSuccessState } from '../../utils/state';
 import WritingService from '../writing';
 
@@ -33,14 +35,17 @@ describe('WritingService', () => {
         USER_ID,
         undefined
       );
+      const expected = dummyWritings.map(mapWriting);
 
-      expect(result).toEqual(useSuccessState(dummyWritings));
+      expect(result).toEqual(useSuccessState(expected));
     });
 
     it('state 매개변수에 "done"이 입력되면 isDone이 true인 writing 다큐먼트를 SuccessState로 리턴한다', async () => {
       const result = await writingService.getByUserIdAndState(USER_ID, 'done');
+      const done = dummyWritings
+        .filter((writing) => writing.isDone)
+        .map(mapWriting);
 
-      const done = dummyWritings.filter((writing) => writing.isDone);
       expect(result).toEqual(useSuccessState(done));
     });
 
@@ -49,8 +54,10 @@ describe('WritingService', () => {
         USER_ID,
         'editing'
       );
+      const editing = dummyWritings
+        .filter((writing) => !writing.isDone)
+        .map(mapWriting);
 
-      const editing = dummyWritings.filter((writing) => !writing.isDone);
       expect(result).toEqual(useSuccessState(editing));
     });
 
@@ -67,15 +74,15 @@ describe('WritingService', () => {
   describe('create', () => {
     it('userId가 입력되면 새 writing을 생성하고 SuccessState로 리턴한다', async () => {
       const spy = jest.spyOn(userModelStub, 'addWriting');
-
-      const result = await writingService.create(USER_ID);
-
       const newWriting = {
-        writingId: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
+        id: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
         isDone: false,
         title: 'Untitled',
         blocks: [],
       };
+
+      const result = await writingService.create(USER_ID);
+
       expect(spy).toHaveBeenCalled();
       expect(result).toEqual(useSuccessState(newWriting));
     });
@@ -126,14 +133,23 @@ describe('WritingService', () => {
         title: 'update',
         isDone: true,
       });
-
       const updated = {
-        writingId: mongoose.Types.ObjectId(WRITING_ID),
+        id: mongoose.Types.ObjectId(WRITING_ID),
         isDone: true,
         title: 'update',
         blocks: [],
       };
+
       expect(result).toEqual(useSuccessState(updated));
     });
   });
 });
+
+const mapWriting = (writing: WritingSchema & { _id: ObjectId }) => {
+  return {
+    id: writing._id,
+    isDone: writing.isDone,
+    title: writing.title,
+    blocks: writing.blocks,
+  };
+};
