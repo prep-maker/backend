@@ -24,10 +24,6 @@ const blockSchema: Schema<BlockSchema> = new mongoose.Schema({
     enum: ['P', 'R', 'E', 'PR', 'RE', 'EP', 'PRE', 'REP', 'PREP'],
     required: true,
   },
-  canMerge: {
-    type: Boolean,
-    required: true,
-  },
   paragraphs: {
     type: [paragraphSchema],
   },

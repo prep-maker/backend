@@ -8,7 +8,6 @@ export type ParagraphSchema = {
 
 export type BlockSchema = {
   readonly type: 'P' | 'R' | 'E' | 'PR' | 'RE' | 'EP' | 'PRE' | 'REP' | 'PREP';
-  readonly canMerge: boolean;
   readonly paragraphs: ParagraphSchema[];
 };
 
