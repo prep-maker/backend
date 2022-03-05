@@ -1,7 +1,9 @@
 import { param } from 'express-validator';
 import { ERROR } from '../../common/constants/error.js';
+import { BlockDocument } from '../../common/types/block.js';
 import { UserDocument } from '../../common/types/user.js';
 import { WritingDocument } from '../../common/types/writing.js';
+import blockModel from '../../models/block.js';
 import userModel from '../../models/user.js';
 import writingModel from '../../models/writing.js';
 
@@ -52,15 +54,15 @@ export const blockIdChain = [
     .isMongoId()
     .withMessage({ message: ERROR.INVALID_BLOCK_ID, status: 400 })
     .custom(async (id: string) => {
-      let user: UserDocument | null;
+      let block: BlockDocument | null;
       try {
-        user = await userModel.findById(id);
+        block = await blockModel.findById(id);
       } catch (error) {
         console.error(error);
         throw error;
       }
 
-      if (user) {
+      if (block) {
         return true;
       }
 
