@@ -9,12 +9,18 @@ import {
 import blockModel from '../models/block.js';
 import userModel from '../models/user.js';
 import writingModel from '../models/writing.js';
+import WritingPresenter from '../presenter/writing.js';
 import WritingService from '../services/writing.js';
 
 const router = express.Router();
 
-const writingService = new WritingService(writingModel, userModel, blockModel);
-const writingController = new WritingController(writingService);
+const writingPresenter = new WritingPresenter(
+  writingModel,
+  userModel,
+  blockModel,
+  WritingService
+);
+const writingController = new WritingController(writingPresenter);
 
 router
   .route('/:userId/writings')

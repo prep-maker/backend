@@ -6,7 +6,7 @@ import {
   TypedRequestQueryAndParams,
 } from '../common/types/express.js';
 import { UpdateQuery, WritingResponse } from '../common/types/writing.js';
-import { IWritingService } from '../services/writing.js';
+import { IWritingPresenter } from '../presenter/writing.js';
 
 type UserIdParam = { userId: string };
 type WritingIdParam = { writingId: string };
@@ -35,7 +35,7 @@ interface IWritingController {
 }
 
 class WritingController implements IWritingController {
-  constructor(private readonly writingService: IWritingService) {}
+  constructor(private readonly writingPresenter: IWritingPresenter) {}
 
   getWritings = async (
     req: TypedRequestQueryAndParams<{ state: StateQuery }, UserIdParam>,
@@ -45,7 +45,7 @@ class WritingController implements IWritingController {
     const userId: string = req.params.userId;
     const state: StateQuery = req.query.state;
     const result: ResultState<WritingResponse[]> =
-      await this.writingService.getByUserIdAndState(userId, state);
+      await this.writingPresenter.getByUserIdAndState(userId, state);
 
     if (result.state !== 'success') {
       return next(result);
@@ -61,7 +61,7 @@ class WritingController implements IWritingController {
   ) => {
     const userId: string = req.params.userId;
     const result: ResultState<WritingResponse> =
-      await this.writingService.create(userId);
+      await this.writingPresenter.create(userId);
 
     if (result.state !== 'success') {
       return next(result);
@@ -76,7 +76,7 @@ class WritingController implements IWritingController {
     next: NextFunction
   ) => {
     const { userId, writingId } = req.params;
-    const result: BadState | void = await this.writingService.remove(
+    const result: BadState | void = await this.writingPresenter.remove(
       userId,
       writingId
     );
@@ -96,7 +96,7 @@ class WritingController implements IWritingController {
     const { writingId } = req.params;
     const { title, isDone } = req.body;
     const result: ResultState<WritingResponse> =
-      await this.writingService.update(writingId, { title, isDone });
+      await this.writingPresenter.update(writingId, { title, isDone });
 
     if (result.state !== 'success') {
       return next(result);

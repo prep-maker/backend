@@ -5,7 +5,7 @@ import {
   signupValidators,
 } from '../middlewares/validators/index.js';
 import userModel from '../models/user.js';
-import AuthService from '../services/auth.js';
+import AuthService from '../presenter/auth.js';
 
 const router = express.Router();
 
