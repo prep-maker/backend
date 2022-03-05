@@ -15,7 +15,7 @@ export interface BlockDocument extends BlockSchema, Document {}
 
 export interface BlockRepository {
   deleteByIds: (ids: readonly ObjectId[]) => Promise<void>;
-  craete: (block: BlockSchema) => Promise<BlockDocument>;
+  create: (block: BlockSchema) => Promise<BlockDocument>;
 }
 
 export type BlockModel = Model<BlockDocument> & BlockRepository;

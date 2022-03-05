@@ -9,7 +9,7 @@ import { ObjectId } from '../common/types/mongoose';
 export const newBlockId = mongoose.Types.ObjectId('621ee328d1172c53545dee69');
 
 class BlockModelStub implements BlockRepository {
-  craete = async (block: BlockSchema): Promise<BlockDocument> =>
+  create = async (block: BlockSchema): Promise<BlockDocument> =>
     ({
       _id: newBlockId,
       type: block.type,
