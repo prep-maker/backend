@@ -6,12 +6,12 @@ import {
 } from '../common/types/block';
 import { ObjectId } from '../common/types/mongoose';
 
-export const newBlockId = mongoose.Types.ObjectId('621ee328d1172c53545dee69');
+export const BLOCK_ID = mongoose.Types.ObjectId('621ee328d1172c53545dee69');
 
 class BlockModelStub implements BlockRepository {
   create = async (block: BlockSchema): Promise<BlockDocument> =>
     ({
-      _id: newBlockId,
+      _id: BLOCK_ID,
       type: block.type,
       paragraphs: block.paragraphs,
     } as any);
