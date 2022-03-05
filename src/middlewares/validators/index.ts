@@ -32,11 +32,7 @@ export const validatorsForGetWritings = [
   ...userIdChain,
   validate,
 ];
-export const validatorsForDeleteWriting = [
-  ...userIdChain,
-  ...writingIdChain,
-  validate,
-];
+export const paramsValidator = [...userIdChain, ...writingIdChain, validate];
 export const validatorsForUpdateWriting = [
   ...userIdChain,
   ...writingIdChain,

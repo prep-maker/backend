@@ -1,4 +1,4 @@
-import { Document, Model } from 'mongoose';
+import { Document, Model, MongooseUpdateQuery } from 'mongoose';
 import { ObjectId } from './mongoose';
 
 export type WritingSchema = {
@@ -30,7 +30,7 @@ export interface WritingRepository {
   deleteById: (id: string) => Promise<ObjectId[]>;
   updateById: (
     id: string,
-    query: Partial<WritingSchema>
+    query: Partial<WritingSchema> | MongooseUpdateQuery<this>
   ) => Promise<WritingDocument>;
 }
 

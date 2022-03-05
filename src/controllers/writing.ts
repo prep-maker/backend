@@ -4,12 +4,11 @@ import {
   TypedRequestBodyAndParams,
   TypedRequestParams,
   TypedRequestQueryAndParams,
+  UserIdParam,
+  WritingIdParam,
 } from '../common/types/express.js';
 import { UpdateQuery, WritingResponse } from '../common/types/writing.js';
 import { IWritingPresenter } from '../presenter/writing.js';
-
-type UserIdParam = { userId: string };
-type WritingIdParam = { writingId: string };
 
 interface IWritingController {
   getWritings: (

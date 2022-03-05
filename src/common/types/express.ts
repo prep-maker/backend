@@ -16,4 +16,8 @@ export interface TypedRequestBodyAndParams<T, P extends Params>
   body: T;
 }
 
+export type UserIdParam = { userId: string };
+
+export type WritingIdParam = { writingId: string };
+
 export type StateQuery = 'editing' | 'done' | undefined;
