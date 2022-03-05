@@ -1,9 +1,7 @@
-import mongoose from 'mongoose';
 import { BlockRepository } from '../types/block';
+import { ObjectId } from '../types/mongoose';
 
 class BlockModelStub implements BlockRepository {
-  deleteByIds = async (
-    ids: readonly mongoose.Types.ObjectId[]
-  ): Promise<void> => {};
+  deleteByIds = async (ids: readonly ObjectId[]): Promise<void> => {};
 }
 export default BlockModelStub;

@@ -1,10 +1,11 @@
 import bcrypt from 'bcrypt';
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import config from '../config/index.js';
+import { ObjectId } from '../types/mongoose.js';
 import { UserAccount, UserDocument, UserModel } from '../types/user.js';
 import { validateUnique } from '../utils/db.js';
 
-const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema({
+const userSchema: Schema<UserDocument> = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
@@ -60,15 +61,15 @@ userSchema.statics.createNewUser = async function (
 };
 
 userSchema.statics.addWriting = async function (
-  userId: mongoose.Types.ObjectId,
-  writingId: mongoose.Types.ObjectId
+  userId: ObjectId,
+  writingId: ObjectId
 ) {
   await this.findByIdAndUpdate(userId, { writings: writingId });
 };
 
 userSchema.statics.deleteWriting = async function (
-  userId: mongoose.Types.ObjectId,
-  writingId: mongoose.Types.ObjectId
+  userId: ObjectId,
+  writingId: ObjectId
 ) {
   await this.findByIdAndUpdate(userId, { $pull: { writings: writingId } });
 };

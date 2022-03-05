@@ -1,4 +1,5 @@
-import mongoose, { Document, Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
+import { ObjectId } from './mongoose';
 
 export type UserResponse = {
   readonly id: string;
@@ -11,7 +12,7 @@ export type UserSchema = {
   readonly email: string;
   readonly name: string;
   password: string;
-  writings: mongoose.Types.ObjectId[];
+  writings: ObjectId[];
 };
 
 export type UserAccount = Omit<UserSchema, 'writings'>;
@@ -24,10 +25,7 @@ export interface UserDocument extends UserSchema, Document {
 export interface UserRepository {
   findByEmail: (email: string) => Promise<UserDocument>;
   createNewUser: (user: UserAccount) => Promise<UserDocument>;
-  addWriting: (
-    userId: mongoose.Types.ObjectId,
-    writingId: mongoose.Types.ObjectId
-  ) => void;
+  addWriting: (userId: ObjectId, writingId: ObjectId) => void;
   deleteWriting: (userId: string, writingId: string) => Promise<void>;
 }
 

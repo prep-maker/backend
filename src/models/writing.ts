@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+import { ObjectId } from '../types/mongoose.js';
 import {
   UpdateQuery,
   WritingDocument,
@@ -6,7 +7,7 @@ import {
   WritingSchema,
 } from '../types/writing.js';
 
-const writingSchema: mongoose.Schema<WritingDocument> = new mongoose.Schema({
+const writingSchema: Schema<WritingDocument> = new mongoose.Schema({
   isDone: {
     type: Boolean,
     required: true,
@@ -26,7 +27,7 @@ const writingSchema: mongoose.Schema<WritingDocument> = new mongoose.Schema({
 });
 
 writingSchema.statics.findAllByUserId = async function (
-  userId: mongoose.Types.ObjectId
+  userId: ObjectId
 ): Promise<WritingSchema[]> {
   const writings = await this.find({ author: userId })
     .populate('blocks')
@@ -36,7 +37,7 @@ writingSchema.statics.findAllByUserId = async function (
 };
 
 writingSchema.statics.findDoneByUserId = async function (
-  userId: mongoose.Types.ObjectId
+  userId: ObjectId
 ): Promise<WritingSchema[]> {
   const writings = await this.find({ author: userId, isDone: true })
     .populate('blocks')
@@ -46,7 +47,7 @@ writingSchema.statics.findDoneByUserId = async function (
 };
 
 writingSchema.statics.findEditingByUserId = async function (
-  userId: mongoose.Types.ObjectId
+  userId: ObjectId
 ): Promise<WritingSchema[]> {
   const writings = await this.find({ author: userId, isDone: false })
     .populate('blocks')
@@ -57,7 +58,7 @@ writingSchema.statics.findEditingByUserId = async function (
 
 writingSchema.statics.deleteById = async function (
   writingId: string
-): Promise<mongoose.Types.ObjectId[]> {
+): Promise<ObjectId[]> {
   const writing = await this.findByIdAndRemove(writingId).lean();
 
   return writing.blocks;
@@ -66,7 +67,7 @@ writingSchema.statics.deleteById = async function (
 writingSchema.statics.updateById = async function (
   writingId: string,
   query: UpdateQuery
-): Promise<mongoose.Types.ObjectId[]> {
+): Promise<ObjectId[]> {
   const writing = await this.findByIdAndUpdate(writingId, query, {
     new: true,
   })

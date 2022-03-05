@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { ObjectId } from '../types/mongoose';
 import { UserAccount, UserRepository } from '../types/user';
 import dummyUsers from './dummyUsers';
 
@@ -14,10 +15,7 @@ class UserModelStub implements UserRepository {
       writings: [],
     } as any);
 
-  addWriting = async (
-    userId: mongoose.Types.ObjectId,
-    writingId: mongoose.Types.ObjectId
-  ) => {};
+  addWriting = async (userId: ObjectId, writingId: ObjectId) => {};
 
   deleteWriting = async (userId: string, writingId: string) => {};
 }

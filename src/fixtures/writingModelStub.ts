@@ -1,5 +1,6 @@
 import { filter, pipe, toArray } from '@fxts/core';
 import mongoose from 'mongoose';
+import { ObjectId } from '../types/mongoose';
 import {
   UpdateQuery,
   WritingDocument,
@@ -9,22 +10,17 @@ import {
 import dummyWritings from './dummyWritings';
 
 class WritingModelStub implements WritingRepository {
-  findAllByUserId = async (
-    userId: mongoose.Types.ObjectId
-  ): Promise<WritingDocument[]> => getDocumentsByUserId(userId) as any;
+  findAllByUserId = async (userId: ObjectId): Promise<WritingDocument[]> =>
+    getDocumentsByUserId(userId) as any;
 
-  findDoneByUserId = async (
-    userId: mongoose.Types.ObjectId
-  ): Promise<WritingDocument[]> =>
+  findDoneByUserId = async (userId: ObjectId): Promise<WritingDocument[]> =>
     pipe(
       getDocumentsByUserId(userId),
       filter((writing) => writing.isDone),
       toArray
     ) as any;
 
-  findEditingByUserId = async (
-    userId: mongoose.Types.ObjectId
-  ): Promise<WritingDocument[]> =>
+  findEditingByUserId = async (userId: ObjectId): Promise<WritingDocument[]> =>
     pipe(
       getDocumentsByUserId(userId),
       filter((writing) => !writing.isDone),
@@ -40,7 +36,7 @@ class WritingModelStub implements WritingRepository {
       blocks: writing.blocks,
     } as any);
 
-  deleteById = async (wrtingId: string): Promise<mongoose.Types.ObjectId[]> => [
+  deleteById = async (wrtingId: string): Promise<ObjectId[]> => [
     'blockId1',
     'blockId2',
   ];
@@ -58,7 +54,7 @@ class WritingModelStub implements WritingRepository {
     } as any);
 }
 
-const getDocumentsByUserId = (userId: mongoose.Types.ObjectId) =>
+const getDocumentsByUserId = (userId: ObjectId) =>
   pipe(
     dummyWritings,
     filter((writing) => String(writing.author) === String(userId)),

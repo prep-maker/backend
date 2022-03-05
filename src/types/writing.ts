@@ -1,17 +1,18 @@
-import mongoose, { Document, Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
+import { ObjectId } from './mongoose';
 
 export type WritingSchema = {
   readonly isDone: boolean;
-  readonly author: mongoose.Types.ObjectId;
+  readonly author: ObjectId;
   readonly title: string;
-  readonly blocks: mongoose.Types.ObjectId[];
+  readonly blocks: ObjectId[];
 };
 
 export type WritingResponse = {
-  readonly id: mongoose.Types.ObjectId;
+  readonly id: ObjectId;
   readonly isDone: boolean;
   readonly title: string;
-  readonly blocks?: mongoose.Types.ObjectId[];
+  readonly blocks?: ObjectId[];
 };
 
 export interface WritingDocument extends WritingSchema, Document {}
@@ -22,17 +23,11 @@ export type UpdateQuery = {
 };
 
 export interface WritingRepository {
-  findAllByUserId: (
-    userId: mongoose.Types.ObjectId
-  ) => Promise<WritingDocument[]>;
-  findDoneByUserId: (
-    userId: mongoose.Types.ObjectId
-  ) => Promise<WritingDocument[]>;
-  findEditingByUserId: (
-    userId: mongoose.Types.ObjectId
-  ) => Promise<WritingDocument[]>;
+  findAllByUserId: (userId: ObjectId) => Promise<WritingDocument[]>;
+  findDoneByUserId: (userId: ObjectId) => Promise<WritingDocument[]>;
+  findEditingByUserId: (userId: ObjectId) => Promise<WritingDocument[]>;
   create: (writing: WritingSchema) => Promise<WritingDocument>;
-  deleteById: (id: string) => Promise<mongoose.Types.ObjectId[]>;
+  deleteById: (id: string) => Promise<ObjectId[]>;
   updateById: (id: string, query: UpdateQuery) => Promise<WritingDocument>;
 }
 

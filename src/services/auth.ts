@@ -13,17 +13,17 @@ import {
   useSuccessState,
 } from '../utils/state.js';
 
+type UserResult = Promise<ResultState<UserResponse>>;
+
 export interface IAuthService {
-  signup: (user: UserAccount) => Promise<ResultState<UserResponse>>;
-  signin: (
-    user: Omit<UserAccount, 'name'>
-  ) => Promise<ResultState<UserResponse>>;
+  signup: (user: UserAccount) => UserResult;
+  signin: (user: Omit<UserAccount, 'name'>) => UserResult;
 }
 
 class AuthService implements IAuthService {
   constructor(private readonly userModel: UserRepository) {}
 
-  signup = async (user: UserAccount): Promise<ResultState<UserResponse>> => {
+  signup = async (user: UserAccount): UserResult => {
     const found: UserDocument = await this.userModel.findByEmail(user.email);
 
     if (found) {
@@ -48,7 +48,7 @@ class AuthService implements IAuthService {
   signin = async ({
     email,
     password,
-  }: Omit<UserAccount, 'name'>): Promise<ResultState<UserResponse>> => {
+  }: Omit<UserAccount, 'name'>): UserResult => {
     try {
       const user: UserDocument = await this.userModel.findByEmail(email);
 

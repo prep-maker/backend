@@ -1,8 +1,9 @@
 import { concurrent, map, pipe, toAsync } from '@fxts/core';
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { BlockModel, BlockSchema, ParagraphSchema } from '../types/block.js';
+import { ObjectId } from '../types/mongoose.js';
 
-const paragraphSchema: mongoose.Schema<ParagraphSchema> = new mongoose.Schema({
+const paragraphSchema: Schema<ParagraphSchema> = new mongoose.Schema({
   type: {
     type: String,
     enum: ['P', 'R', 'E'],
@@ -13,7 +14,7 @@ const paragraphSchema: mongoose.Schema<ParagraphSchema> = new mongoose.Schema({
   },
 });
 
-const blockSchema: mongoose.Schema<BlockSchema> = new mongoose.Schema({
+const blockSchema: Schema<BlockSchema> = new mongoose.Schema({
   type: {
     type: String,
     enum: ['P', 'R', 'E', 'PR', 'RE', 'EP', 'PRE', 'REP', 'PREP'],
@@ -29,7 +30,7 @@ const blockSchema: mongoose.Schema<BlockSchema> = new mongoose.Schema({
 });
 
 blockSchema.statics.deleteByIds = async function (
-  ids: readonly mongoose.Types.ObjectId[]
+  ids: readonly ObjectId[]
 ): Promise<void> {
   pipe(
     ids,

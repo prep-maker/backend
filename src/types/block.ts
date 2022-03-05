@@ -1,4 +1,5 @@
-import mongoose, { Document, Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
+import { ObjectId } from './mongoose';
 
 export type ParagraphSchema = {
   type: 'P' | 'R' | 'E';
@@ -12,7 +13,7 @@ export type BlockSchema = {
 };
 
 export interface BlockRepository {
-  deleteByIds: (ids: readonly mongoose.Types.ObjectId[]) => Promise<void>;
+  deleteByIds: (ids: readonly ObjectId[]) => Promise<void>;
 }
 
 export interface BlockDocument extends BlockSchema, Document {}
