@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import config from './config/index.js';
+import config from './common/config/index.js';
 import initApp from './loaders/index.js';
 import authRouter from './routes/auth.js';
 import userRouter from './routes/user.js';

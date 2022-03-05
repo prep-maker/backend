@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
+import { UserAccount, UserResponse } from '../common/types/user.js';
 import { IAuthService } from '../services/auth.js';
-import { UserAccount, UserResponse } from '../types/user.js';
 
 interface IAuthController {
   signup(req: Request, res: Response, next: NextFunction): void;

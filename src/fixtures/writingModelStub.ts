@@ -1,12 +1,12 @@
 import { filter, pipe, toArray } from '@fxts/core';
 import mongoose from 'mongoose';
-import { ObjectId } from '../types/mongoose';
+import { ObjectId } from '../common/types/mongoose';
 import {
   UpdateQuery,
   WritingDocument,
   WritingRepository,
   WritingSchema,
-} from '../types/writing';
+} from '../common/types/writing';
 import dummyWritings from './dummyWritings';
 
 class WritingModelStub implements WritingRepository {

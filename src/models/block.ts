@@ -1,7 +1,11 @@
 import { concurrent, map, pipe, toAsync } from '@fxts/core';
 import mongoose, { Schema } from 'mongoose';
-import { BlockModel, BlockSchema, ParagraphSchema } from '../types/block.js';
-import { ObjectId } from '../types/mongoose.js';
+import {
+  BlockModel,
+  BlockSchema,
+  ParagraphSchema,
+} from '../common/types/block.js';
+import { ObjectId } from '../common/types/mongoose.js';
 
 const paragraphSchema: Schema<ParagraphSchema> = new mongoose.Schema({
   type: {

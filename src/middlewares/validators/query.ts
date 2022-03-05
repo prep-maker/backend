@@ -1,5 +1,5 @@
 import { query } from 'express-validator';
-import { ERROR } from '../../constants/error.js';
+import { ERROR } from '../../common/constants/error.js';
 
 const stateQueryChain = [
   query('state').custom((value) => {

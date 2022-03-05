@@ -1,12 +1,12 @@
 import { NextFunction, Response } from 'express';
-import { IWritingService } from '../services/writing.js';
 import {
   StateQuery,
   TypedRequestBodyAndParams,
   TypedRequestParams,
   TypedRequestQueryAndParams,
-} from '../types/express.js';
-import { UpdateQuery, WritingResponse } from '../types/writing.js';
+} from '../common/types/express.js';
+import { UpdateQuery, WritingResponse } from '../common/types/writing.js';
+import { IWritingService } from '../services/writing.js';
 
 type UserIdParam = { userId: string };
 type WritingIdParam = { writingId: string };

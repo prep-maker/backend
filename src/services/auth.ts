@@ -1,17 +1,17 @@
 import jwt from 'jsonwebtoken';
-import config from '../config/index.js';
-import { ERROR } from '../constants/error.js';
+import config from '../common/config/index.js';
+import { ERROR } from '../common/constants/error.js';
 import {
   UserAccount,
   UserDocument,
   UserRepository,
   UserResponse,
-} from '../types/user.js';
+} from '../common/types/user.js';
 import {
   useErrorState,
   useFailState,
   useSuccessState,
-} from '../utils/state.js';
+} from '../common/utils/state.js';
 
 type UserResult = Promise<ResultState<UserResponse>>;
 

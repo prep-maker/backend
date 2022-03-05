@@ -1,9 +1,9 @@
 import { param } from 'express-validator';
-import { ERROR } from '../../constants/error.js';
+import { ERROR } from '../../common/constants/error.js';
+import { UserDocument } from '../../common/types/user.js';
+import { WritingDocument } from '../../common/types/writing.js';
 import userModel from '../../models/user.js';
 import writingModel from '../../models/writing.js';
-import { UserDocument } from '../../types/user.js';
-import { WritingDocument } from '../../types/writing.js';
 
 export const userIdChain = [
   param('userId')

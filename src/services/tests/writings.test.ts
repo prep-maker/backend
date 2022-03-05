@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
-import { ERROR } from '../../constants/error';
+import { ERROR } from '../../common/constants/error';
+import { ObjectId } from '../../common/types/mongoose';
+import { WritingSchema } from '../../common/types/writing';
+import { useFailState, useSuccessState } from '../../common/utils/state';
 import BlockModelStub from '../../fixtures/blockModelStub';
 import dummyWritings from '../../fixtures/dummyWritings';
 import UserModelStub from '../../fixtures/userModelStub';
 import WritingModelStub from '../../fixtures/writingModelStub';
-import { ObjectId } from '../../types/mongoose';
-import { WritingSchema } from '../../types/writing';
-import { useFailState, useSuccessState } from '../../utils/state';
 import WritingService from '../writing';
 
 describe('WritingService', () => {

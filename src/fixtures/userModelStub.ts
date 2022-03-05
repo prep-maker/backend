@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { ObjectId } from '../types/mongoose';
-import { UserAccount, UserRepository } from '../types/user';
+import { ObjectId } from '../common/types/mongoose';
+import { UserAccount, UserRepository } from '../common/types/user';
 import dummyUsers from './dummyUsers';
 
 class UserModelStub implements UserRepository {

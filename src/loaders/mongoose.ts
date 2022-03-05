@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import config from '../config/index.js';
+import config from '../common/config/index.js';
 
 const connectDB = () => {
   mongoose.connect(config.db.host, (error) => {

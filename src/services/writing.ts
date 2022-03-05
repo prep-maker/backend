@@ -1,18 +1,18 @@
 import { pipe } from '@fxts/core';
 import mongoose from 'mongoose';
-import { ERROR } from '../constants/error.js';
-import { BlockRepository } from '../types/block.js';
-import { StateQuery } from '../types/express.js';
-import { ObjectId } from '../types/mongoose.js';
-import { UserRepository } from '../types/user.js';
+import { ERROR } from '../common/constants/error.js';
+import { BlockRepository } from '../common/types/block.js';
+import { StateQuery } from '../common/types/express.js';
+import { ObjectId } from '../common/types/mongoose.js';
+import { UserRepository } from '../common/types/user.js';
 import {
   UpdateQuery,
   WritingDocument,
   WritingRepository,
   WritingResponse,
-} from '../types/writing.js';
-import catchError from '../utils/catchError.js';
-import { useFailState, useSuccessState } from '../utils/state.js';
+} from '../common/types/writing.js';
+import catchError from '../common/utils/catchError.js';
+import { useFailState, useSuccessState } from '../common/utils/state.js';
 
 type WritingResult = Promise<ResultState<WritingResponse>>;
 type WritingListResult = Promise<ResultState<WritingResponse[]>>;

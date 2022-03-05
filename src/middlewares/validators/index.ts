@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-import { useFailState } from '../../utils/state.js';
+import { useFailState } from '../../common/utils/state.js';
 import { writingBodyChain } from './body.js';
 import { userIdChain, writingIdChain } from './params.js';
 import stateQueryChain from './query.js';

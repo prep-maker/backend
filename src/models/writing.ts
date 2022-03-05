@@ -1,10 +1,10 @@
 import mongoose, { Schema } from 'mongoose';
-import { ObjectId } from '../types/mongoose.js';
+import { ObjectId } from '../common/types/mongoose.js';
 import {
   UpdateQuery,
   WritingDocument,
   WritingModel,
-} from '../types/writing.js';
+} from '../common/types/writing.js';
 
 const writingSchema: Schema<WritingDocument> = new mongoose.Schema({
   isDone: {

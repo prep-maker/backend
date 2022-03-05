@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import mongoose, { Schema } from 'mongoose';
-import config from '../config/index.js';
-import { UserAccount, UserDocument, UserModel } from '../types/user.js';
-import { validateUnique } from '../utils/db.js';
+import config from '../common/config/index.js';
+import { UserAccount, UserDocument, UserModel } from '../common/types/user.js';
+import { validateUnique } from '../common/utils/db.js';
 
 const userSchema: Schema<UserDocument> = new mongoose.Schema({
   email: {
