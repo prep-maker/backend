@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { UserAccount, UserResponse } from '../common/types/user.js';
-import { IAuthService } from '../presenter/auth.js';
+import { IAuthPresenter } from '../presenter/auth.js';
 
 interface IAuthController {
   signup(req: Request, res: Response, next: NextFunction): void;
@@ -8,12 +8,12 @@ interface IAuthController {
 }
 
 class AuthController implements IAuthController {
-  constructor(private readonly authService: IAuthService) {}
+  constructor(private readonly authPresenter: IAuthPresenter) {}
 
   signup = async (req: Request, res: Response, next: NextFunction) => {
     const { email, name, password } = req.body;
     const user: UserAccount = { email, name, password };
-    const result: ResultState<UserResponse> = await this.authService.signup(
+    const result: ResultState<UserResponse> = await this.authPresenter.signup(
       user
     );
 
@@ -26,7 +26,7 @@ class AuthController implements IAuthController {
 
   signin = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
-    const result: ResultState<UserResponse> = await this.authService.signin({
+    const result: ResultState<UserResponse> = await this.authPresenter.signin({
       email,
       password,
     });

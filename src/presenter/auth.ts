@@ -1,5 +1,4 @@
-import jwt from 'jsonwebtoken';
-import config from '../common/config/index.js';
+import { pipe } from '@fxts/core';
 import { ERROR } from '../common/constants/error.js';
 import {
   UserAccount,
@@ -7,21 +6,26 @@ import {
   UserRepository,
   UserResponse,
 } from '../common/types/user.js';
-import {
-  useErrorState,
-  useFailState,
-  useSuccessState,
-} from '../common/utils/state.js';
+import catchError from '../common/utils/catchError.js';
+import { useFailState } from '../common/utils/state.js';
+import AuthService, { IAuthService } from '../services/auth.js';
 
 type UserResult = Promise<ResultState<UserResponse>>;
 
-export interface IAuthService {
+export interface IAuthPresenter {
   signup: (user: UserAccount) => UserResult;
   signin: (user: Omit<UserAccount, 'name'>) => UserResult;
 }
 
-class AuthService implements IAuthService {
-  constructor(private readonly userModel: UserRepository) {}
+class AuthPresenter implements IAuthPresenter {
+  private readonly authService: IAuthService;
+
+  constructor(
+    private readonly userModel: UserRepository,
+    private readonly AuthService: new (userModel: UserRepository) => AuthService
+  ) {
+    this.authService = new this.AuthService(this.userModel);
+  }
 
   signup = async (user: UserAccount): UserResult => {
     const found: UserDocument = await this.userModel.findByEmail(user.email);
@@ -30,62 +34,37 @@ class AuthService implements IAuthService {
       return useFailState(ERROR.DUPLICATE_EMAIL, 400);
     }
 
-    try {
-      const newUser = await this.userModel.createNewUser(user);
-      const token: string = AuthService.createJwtToken(newUser);
+    const result = await pipe(
+      this.authService.signup.bind(this, user),
+      catchError
+    );
 
-      return useSuccessState({
-        id: newUser._id.toString(),
-        email: newUser.email,
-        name: newUser.name,
-        token,
-      });
-    } catch (error) {
-      return useErrorState(error as Error);
-    }
+    return result;
   };
 
   signin = async ({
     email,
     password,
   }: Omit<UserAccount, 'name'>): UserResult => {
-    try {
-      const user: UserDocument = await this.userModel.findByEmail(email);
+    const user: UserDocument = await this.userModel.findByEmail(email);
 
-      if (!user) {
-        return useFailState(ERROR.NOT_FOUND_USER, 404);
-      }
-
-      const isPasswordValid: boolean = await user.isPasswordValid(password);
-
-      if (!isPasswordValid) {
-        return useFailState(ERROR.INVALID_LOGIN, 400);
-      }
-
-      const token: string = AuthService.createJwtToken(user);
-
-      return useSuccessState({
-        id: user._id.toString(),
-        email,
-        name: user.name,
-        token,
-      });
-    } catch (error) {
-      return useErrorState(error as Error);
+    if (!user) {
+      return useFailState(ERROR.NOT_FOUND_USER, 404);
     }
-  };
 
-  private static createJwtToken = (user: UserDocument): string => {
-    const userInfo = {
-      id: user._id.toString(),
-      email: user.email,
-      name: user.name,
-    };
+    const isPasswordValid: boolean = await user.isPasswordValid(password);
 
-    return jwt.sign(userInfo, config.jwt.secretKey, {
-      expiresIn: config.jwt.expiresIn,
-    });
+    if (!isPasswordValid) {
+      return useFailState(ERROR.INVALID_LOGIN, 400);
+    }
+
+    const result = await pipe(
+      this.authService.signin.bind(this, user),
+      catchError
+    );
+
+    return result;
   };
 }
 
-export default AuthService;
+export default AuthPresenter;
