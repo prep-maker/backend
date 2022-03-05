@@ -4,6 +4,7 @@ import WritingController from '../controllers/writing.js';
 import {
   paramsValidator,
   userParamValidators,
+  validatorsForCreateBlock,
   validatorsForGetWritings,
   validatorsForUpdateWriting,
 } from '../middlewares/validators/index.js';
@@ -44,6 +45,6 @@ const blockController = new BlockController(blockPresenter);
 
 router
   .route('/:userId/writings/:writingId/blocks')
-  .post(paramsValidator, blockController.create);
+  .post(validatorsForCreateBlock, blockController.create);
 
 export default router;

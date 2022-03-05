@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { useFailState } from '../../common/utils/state.js';
-import { signinBodyChain, signupBodyChain, writingBodyChain } from './body.js';
+import {
+  blockBodyChain,
+  signinBodyChain,
+  signupBodyChain,
+  writingBodyChain,
+} from './body.js';
 import { userIdChain, writingIdChain } from './params.js';
 import stateQueryChain from './query.js';
 
@@ -35,5 +40,11 @@ export const validatorsForUpdateWriting = [
   ...userIdChain,
   ...writingIdChain,
   ...writingBodyChain,
+  validate,
+];
+export const validatorsForCreateBlock = [
+  ...userIdChain,
+  ...writingIdChain,
+  ...blockBodyChain,
   validate,
 ];

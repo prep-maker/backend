@@ -19,13 +19,20 @@ export const writingBodyChain = [
 
 export const blockBodyChain = [
   body('type')
+    .notEmpty()
+    .withMessage('블록 타입을 입력해주세요.')
     .isString()
     .trim()
     .isIn(['P', 'R', 'E', 'PR', 'RE', 'EP', 'PRE', 'REP', 'PREP'])
-    .withMessage(
-      'block 타입은 P, R, E, PR, RE, EP, PRE, REP, PREP 중에 하나여야 합니다.'
-    ),
-  body('paragraph').isArray().equals,
+    .withMessage({
+      message:
+        'block 타입은 P, R, E, PR, RE, EP, PRE, REP, PREP 중에 하나여야 합니다.',
+      status: 400,
+    }),
+  body('paragraphs').isArray().withMessage({
+    message: 'paragraphs는 배열이어야 합니다.',
+    status: 400,
+  }),
 ];
 
 export const signinBodyChain = [
