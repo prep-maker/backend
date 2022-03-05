@@ -25,11 +25,21 @@ const validate = (
 
 export const signupValidators = [...signupChain, validate];
 export const signinValidators = [...signinChain, validate];
+
+export const userParamValidators = [...userIdChain, validate];
 export const validatorsForGetWritings = [
   ...stateQueryChain,
   ...userIdChain,
   validate,
 ];
-export const userParamValidators = [...userIdChain, validate];
-export const writingParamValidators = [...writingIdChain, validate];
-export const writingBodyValidators = [...writingBodyChain, validate];
+export const validatorsForDeleteWriting = [
+  ...userIdChain,
+  ...writingIdChain,
+  validate,
+];
+export const validatorsForUpdateWriting = [
+  ...userIdChain,
+  ...writingIdChain,
+  ...writingBodyChain,
+  validate,
+];

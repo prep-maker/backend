@@ -2,9 +2,9 @@ import express from 'express';
 import WritingController from '../controllers/writing.js';
 import {
   userParamValidators,
+  validatorsForDeleteWriting,
   validatorsForGetWritings,
-  writingBodyValidators,
-  writingParamValidators,
+  validatorsForUpdateWriting,
 } from '../middlewares/validators/index.js';
 import blockModel from '../models/block.js';
 import userModel from '../models/user.js';
@@ -23,12 +23,7 @@ router
 
 router
   .route('/:userId/writings/:writingId')
-  .delete(userParamValidators, writingParamValidators, writingController.remove)
-  .put(
-    userParamValidators,
-    writingParamValidators,
-    writingBodyValidators,
-    writingController.update
-  );
+  .delete(validatorsForDeleteWriting, writingController.remove)
+  .put(validatorsForUpdateWriting, writingController.update);
 
 export default router;
