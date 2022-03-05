@@ -1,4 +1,4 @@
-import { concurrent, map, pipe, toAsync } from '@fxts/core';
+import { concurrent, map, pipe, toArray, toAsync } from '@fxts/core';
 import mongoose, { Schema } from 'mongoose';
 import {
   BlockModel,
@@ -30,13 +30,14 @@ const blockSchema: Schema<BlockSchema> = new mongoose.Schema({
 });
 
 blockSchema.statics.deleteByIds = async function (
-  ids: readonly ObjectId[]
+  ids: readonly ObjectId[] | readonly string[]
 ): Promise<void> {
   pipe(
     ids,
     toAsync,
     map(this.findByIdAndRemove.bind(blockModel)),
-    concurrent(5)
+    concurrent(5),
+    toArray
   );
 };
 
