@@ -11,10 +11,11 @@ export type BlockSchema = {
   readonly paragraphs: ParagraphSchema[];
 };
 
+export interface BlockDocument extends BlockSchema, Document {}
+
 export interface BlockRepository {
   deleteByIds: (ids: readonly ObjectId[]) => Promise<void>;
+  craete: (block: BlockSchema) => Promise<BlockDocument>;
 }
-
-export interface BlockDocument extends BlockSchema, Document {}
 
 export type BlockModel = Model<BlockDocument> & BlockRepository;
