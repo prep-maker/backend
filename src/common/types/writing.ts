@@ -1,18 +1,19 @@
 import { Document, Model, MongooseUpdateQuery } from 'mongoose';
+import { BlockDocument } from './block';
 import { ObjectId } from './mongoose';
 
 export type WritingSchema = {
   readonly isDone: boolean;
   readonly author: ObjectId;
   readonly title: string;
-  readonly blocks: ObjectId[];
+  readonly blocks: BlockDocument[];
 };
 
 export type WritingResponse = {
   readonly id: ObjectId;
   readonly isDone: boolean;
   readonly title: string;
-  readonly blocks?: ObjectId[];
+  readonly blocks?: BlockDocument[];
 };
 
 export interface WritingDocument extends WritingSchema, Document {}

@@ -1,4 +1,4 @@
-import { BlockRepository } from '../common/types/block.js';
+import { BlockDocument, BlockRepository } from '../common/types/block.js';
 import { StateQuery } from '../common/types/express.js';
 import { ObjectId } from '../common/types/mongoose.js';
 import { UserRepository } from '../common/types/user.js';
@@ -39,7 +39,10 @@ class WritingService implements IWritingService {
       id: writing._id,
       isDone: writing.isDone,
       title: writing.title,
-      blocks: writing.blocks,
+      blocks: writing.blocks.map((block) => ({
+        ...block,
+        id: block._id,
+      })) as BlockDocument[] & { id: ObjectId },
     }));
 
     return useSuccessState(result);
