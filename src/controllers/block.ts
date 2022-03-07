@@ -64,12 +64,12 @@ class BlockController implements IBlockController {
   };
 
   update = async (
-    req: TypedRequestBodyAndParams<BlockSchema[], WritingIdParam>,
+    req: TypedRequestBodyAndParams<{ blocks: BlockSchema[] }, WritingIdParam>,
     res: Response,
     next: NextFunction
   ) => {
     const { writingId } = req.params;
-    const blocks = req.body;
+    const { blocks } = req.body;
     const result = await this.blockPresenter.update(writingId, blocks);
 
     if (result.state !== 'success') {
