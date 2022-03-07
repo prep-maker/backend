@@ -16,5 +16,7 @@ class BlockModelStub implements BlockRepository {
       paragraphs: block.paragraphs,
     } as any);
   deleteByIds = async (ids: readonly ObjectId[]): Promise<void> => {};
+  createBlocks = async (blocks: BlockSchema[]) =>
+    blocks.map((block) => ({ ...block, id: BLOCK_ID }));
 }
 export default BlockModelStub;
