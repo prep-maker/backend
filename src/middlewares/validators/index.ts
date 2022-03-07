@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 import { useFailState } from '../../common/utils/state.js';
 import {
   blockBodyChain,
+  blockListBodyChain,
   signinBodyChain,
   signupBodyChain,
   writingBodyChain,
@@ -52,5 +53,10 @@ export const validatorsForDeleteBlock = [
   ...userIdChain,
   ...writingIdChain,
   ...blockIdChain,
+  validate,
+];
+export const validatorForUpdateBlocks = [
+  ...writingIdChain,
+  ...blockListBodyChain,
   validate,
 ];

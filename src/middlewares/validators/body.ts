@@ -35,6 +35,31 @@ export const blockBodyChain = [
   }),
 ];
 
+export const blockListBodyChain = [
+  body('blocks')
+    .notEmpty()
+    .withMessage({
+      message: ERROR.BLOCK_LIST_REQUIRED,
+      status: 400,
+    })
+    .isArray()
+    .withMessage({ message: ERROR.BLOCKS_ARRAY_REQUIRED, status: 400 })
+    .custom((blocks) => {
+      for (const block of blocks) {
+        if (!block.type) {
+          throw { message: ERROR.NO_BLOCK_TYPE, status: 400 };
+        }
+
+        if (!Object.keys(BLOCK_TYPE).includes(blocks.type)) {
+          throw {
+            message: ERROR.BLOCK_TYPE,
+            status: 400,
+          };
+        }
+      }
+    }),
+];
+
 export const signinBodyChain = [
   body('email')
     .trim()
