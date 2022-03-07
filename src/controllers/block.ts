@@ -79,7 +79,7 @@ class BlockController implements IBlockController {
       return next(result);
     }
 
-    res.json(result);
+    res.json(result.data);
   };
 }
 
