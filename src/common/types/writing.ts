@@ -1,5 +1,5 @@
 import { Document, Model, MongooseUpdateQuery } from 'mongoose';
-import { BlockDocument } from './block';
+import { BlockDocument, BlockResponse } from './block';
 import { ObjectId } from './mongoose';
 
 export type WritingSchema = {
@@ -28,7 +28,7 @@ export interface WritingRepository {
   findDoneByUserId: (userId: ObjectId) => Promise<WritingDocument[]>;
   findEditingByUserId: (userId: ObjectId) => Promise<WritingDocument[]>;
   create: (writing: WritingSchema) => Promise<WritingDocument>;
-  deleteById: (id: string) => Promise<ObjectId[]>;
+  deleteById: (id: string) => Promise<BlockResponse[]>;
   updateById: (
     id: string,
     query: Partial<WritingSchema> | MongooseUpdateQuery<this>,

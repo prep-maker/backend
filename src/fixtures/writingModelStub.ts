@@ -1,5 +1,6 @@
 import { filter, pipe, toArray } from '@fxts/core';
 import mongoose from 'mongoose';
+import { BlockResponse } from '../common/types/block';
 import { ObjectId } from '../common/types/mongoose';
 import {
   WritingDocument,
@@ -35,9 +36,12 @@ class WritingModelStub implements WritingRepository {
       blocks: writing.blocks,
     } as any);
 
-  deleteById = async (wrtingId: string): Promise<ObjectId[]> => [
-    'blockId1',
-    'blockId2',
+  deleteById = async (wrtingId: string): Promise<BlockResponse[]> => [
+    {
+      id: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
+      type: 'P',
+      paragraphs: [],
+    },
   ];
 
   updateById = async (

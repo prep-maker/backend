@@ -9,7 +9,7 @@ import { WritingRepository } from '../common/types/writing.js';
 import { useSuccessState } from '../common/utils/state.js';
 
 type BlockResult = Promise<SuccessState<BlockResponse>>;
-type BlockListResult = Promise<SuccessState<BlockResponse[]>>;
+export type BlockListResult = Promise<SuccessState<BlockResponse[]>>;
 
 export interface IBlockService {
   create: (writingId: string, block: BlockSchema) => BlockResult;

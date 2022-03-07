@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { ObjectId } from '../common/types/mongoose.js';
+import { BlockResponse } from '../common/types/block.js';
 import {
   WritingDocument,
   WritingModel,
@@ -63,12 +63,12 @@ writingSchema.statics.findEditingByUserId = async function (
 
 writingSchema.statics.deleteById = async function (
   writingId: string
-): Promise<ObjectId[]> {
-  const writing: WritingDocument = await this.findByIdAndRemove(
-    writingId
-  ).lean();
+): Promise<BlockResponse[]> {
+  const writing: WritingDocument = await this.findByIdAndRemove(writingId)
+    .populate('blocks')
+    .lean();
 
-  return writing.blocks;
+  return writing.blocks.map((block) => ({ ...block, id: block._id }));
 };
 
 writingSchema.statics.updateById = async function (

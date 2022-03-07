@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+import { BlockResponse } from '../common/types/block.js';
 import {
   StateQuery,
   TypedRequestBodyAndParams,
@@ -75,16 +76,14 @@ class WritingController implements IWritingController {
     next: NextFunction
   ) => {
     const { userId, writingId } = req.params;
-    const result: BadState | void = await this.writingPresenter.remove(
-      userId,
-      writingId
-    );
+    const result: ResultState<BlockResponse[]> =
+      await this.writingPresenter.remove(userId, writingId);
 
-    if (result?.state) {
+    if (result.state !== 'success') {
       return next(result);
     }
 
-    res.status(204).json();
+    res.status(204).json(result.data);
   };
 
   update = async (

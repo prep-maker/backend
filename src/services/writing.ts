@@ -1,4 +1,8 @@
-import { BlockDocument, BlockRepository } from '../common/types/block.js';
+import {
+  BlockDocument,
+  BlockRepository,
+  BlockResponse,
+} from '../common/types/block.js';
 import { StateQuery } from '../common/types/express.js';
 import { ObjectId } from '../common/types/mongoose.js';
 import { UserRepository } from '../common/types/user.js';
@@ -9,6 +13,7 @@ import {
   WritingResponse,
 } from '../common/types/writing.js';
 import { useSuccessState } from '../common/utils/state.js';
+import { BlockListResult } from './block.js';
 
 type WritingResult = Promise<SuccessState<WritingResponse>>;
 type WritingListResult = Promise<SuccessState<WritingResponse[]>>;
@@ -16,7 +21,7 @@ type WritingListResult = Promise<SuccessState<WritingResponse[]>>;
 export interface IWritingService {
   getByUserIdAndState: (userId: string, state: StateQuery) => WritingListResult;
   create: (userId: string) => WritingResult;
-  remove: (userId: string, writingId: string) => Promise<void | BadState>;
+  remove: (userId: string, writingId: string) => BlockListResult;
   update: (writingId: string, query: UpdateQuery) => WritingResult;
 }
 
@@ -89,10 +94,15 @@ class WritingService implements IWritingService {
     });
   };
 
-  remove = async (userId: string, writingId: string): Promise<void> => {
+  remove = async (userId: string, writingId: string): BlockListResult => {
     this.userModel.deleteWriting(userId, writingId);
-    const blockIds: ObjectId[] = await this.writingModel.deleteById(writingId);
+    const blocks: BlockResponse[] = await this.writingModel.deleteById(
+      writingId
+    );
+    const blockIds = blocks.map((block) => block.id);
     this.blockModel.deleteByIds(blockIds);
+
+    return useSuccessState(blocks);
   };
 
   update = async (writingId: string, query: UpdateQuery): WritingResult => {

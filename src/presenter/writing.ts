@@ -1,7 +1,7 @@
 import { pipe } from '@fxts/core';
 import mongoose from 'mongoose';
 import { ERROR } from '../common/constants/error.js';
-import { BlockRepository } from '../common/types/block.js';
+import { BlockRepository, BlockResponse } from '../common/types/block.js';
 import { StateQuery } from '../common/types/express.js';
 import { UserRepository } from '../common/types/user.js';
 import {
@@ -15,11 +15,12 @@ import WritingService, { IWritingService } from '../services/writing.js';
 
 type WritingResult = Promise<ResultState<WritingResponse>>;
 type WritingListResult = Promise<ResultState<WritingResponse[]>>;
+type BlockListResult = Promise<ResultState<BlockResponse[]>>;
 
 export interface IWritingPresenter {
   getByUserIdAndState: (userId: string, state: StateQuery) => WritingListResult;
   create: (userId: string) => WritingResult;
-  remove: (userId: string, writingId: string) => Promise<void | BadState>;
+  remove: (userId: string, writingId: string) => BlockListResult;
   update: (writingId: string, query: UpdateQuery) => WritingResult;
 }
 
@@ -73,10 +74,7 @@ class WritingPresenter implements IWritingPresenter {
     return result;
   };
 
-  remove = async (
-    userId: string,
-    writingId: string
-  ): Promise<void | BadState> => {
+  remove = async (userId: string, writingId: string): BlockListResult => {
     if (!mongoose.isValidObjectId(userId)) {
       return useFailState(ERROR.INVALID_USER_ID, 400);
     }
