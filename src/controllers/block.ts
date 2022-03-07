@@ -21,6 +21,11 @@ interface IBlockController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  update: (
+    req: TypedRequestBodyAndParams<BlockSchema[], UserIdParam & WritingIdParam>,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
 }
 
 class BlockController implements IBlockController {
@@ -56,6 +61,22 @@ class BlockController implements IBlockController {
     }
 
     res.sendStatus(204);
+  };
+
+  update = async (
+    req: TypedRequestBodyAndParams<BlockSchema[], WritingIdParam>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { writingId } = req.params;
+    const blocks = req.body;
+    const result = await this.blockPresenter.update(writingId, blocks);
+
+    if (result.state !== 'success') {
+      return next(result);
+    }
+
+    res.json(result);
   };
 }
 
