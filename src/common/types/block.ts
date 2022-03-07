@@ -11,6 +11,8 @@ export type BlockSchema = {
   readonly paragraphs: ParagraphSchema[];
 };
 
+export type BlockResponse = BlockSchema & { id: ObjectId };
+
 export interface BlockDocument extends BlockSchema, Document {}
 
 export interface BlockRepository {
