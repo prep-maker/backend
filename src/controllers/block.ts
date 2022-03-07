@@ -22,7 +22,10 @@ interface IBlockController {
     next: NextFunction
   ) => Promise<void>;
   update: (
-    req: TypedRequestBodyAndParams<BlockSchema[], UserIdParam & WritingIdParam>,
+    req: TypedRequestBodyAndParams<
+      { blocks: BlockSchema[] },
+      UserIdParam & WritingIdParam
+    >,
     res: Response,
     next: NextFunction
   ) => Promise<void>;
