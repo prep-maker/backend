@@ -31,7 +31,8 @@ export interface WritingRepository {
   deleteById: (id: string) => Promise<ObjectId[]>;
   updateById: (
     id: string,
-    query: Partial<WritingSchema> | MongooseUpdateQuery<this>
+    query: Partial<WritingSchema> | MongooseUpdateQuery<this>,
+    option?: { new: boolean }
   ) => Promise<WritingDocument>;
 }
 

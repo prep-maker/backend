@@ -73,14 +73,13 @@ writingSchema.statics.deleteById = async function (
 
 writingSchema.statics.updateById = async function (
   writingId: string,
-  query: Partial<WritingSchema>
+  query: Partial<WritingSchema>,
+  option: { new: boolean } = { new: true }
 ): Promise<WritingDocument> {
   const writing: WritingDocument = await this.findByIdAndUpdate(
     writingId,
     query,
-    {
-      new: true,
-    }
+    option
   )
     .populate('blocks')
     .lean();
