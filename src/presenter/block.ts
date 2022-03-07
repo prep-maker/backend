@@ -1,18 +1,23 @@
 import { pipe } from '@fxts/core';
 import mongoose from 'mongoose';
 import { ERROR } from '../common/constants/error.js';
-import { BlockRepository, BlockSchema } from '../common/types/block.js';
-import { ObjectId } from '../common/types/mongoose.js';
+import {
+  BlockRepository,
+  BlockResponse,
+  BlockSchema,
+} from '../common/types/block.js';
 import { WritingRepository } from '../common/types/writing.js';
 import catchError from '../common/utils/catchError.js';
 import { useFailState } from '../common/utils/state.js';
 import BlockService, { IBlockService } from '../services/block.js';
 
-type BlockResult = Promise<ResultState<BlockSchema & { id: ObjectId }>>;
+type BlockResult = Promise<ResultState<BlockResponse>>;
+type BlockListResult = Promise<ResultState<BlockResponse[]>>;
 
 export interface IBlockPresenter {
   create: (writingId: string, block: BlockSchema) => BlockResult;
   remove: (writingId: string, blockId: string) => Promise<BadState | void>;
+  update: (writingId: string, block: BlockSchema[]) => BlockListResult;
 }
 
 class BlockPresenter implements IBlockPresenter {
@@ -30,6 +35,22 @@ class BlockPresenter implements IBlockPresenter {
       this.writingModel
     );
   }
+
+  update = async (
+    writingId: string,
+    blocks: BlockSchema[]
+  ): BlockListResult => {
+    if (!mongoose.isValidObjectId(writingId)) {
+      return useFailState(ERROR.INVALID_WRITING_ID, 400);
+    }
+
+    const result = await pipe(
+      this.blockService.update.bind(this, writingId, blocks),
+      catchError
+    );
+
+    return result;
+  };
 
   create = async (writingId: string, block: BlockSchema): BlockResult => {
     if (!mongoose.isValidObjectId(writingId)) {
