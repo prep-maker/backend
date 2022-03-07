@@ -47,7 +47,10 @@ blockSchema.statics.createBlocks = async function (
   blocks: BlockSchema[]
 ): Promise<BlockResponse[]> {
   const create = async (block: BlockSchema) => {
-    const document: BlockDocument = new this(block);
+    const document: BlockDocument = new this({
+      type: block.type,
+      paragraphs: block.paragraphs,
+    });
     await document.save();
     const newBlock = document.toObject();
 
