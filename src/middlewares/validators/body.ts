@@ -50,12 +50,14 @@ export const blockListBodyChain = [
           throw { message: ERROR.NO_BLOCK_TYPE, status: 400 };
         }
 
-        if (!Object.keys(BLOCK_TYPE).includes(blocks.type)) {
+        if (!Object.keys(BLOCK_TYPE).includes(block.type)) {
           throw {
             message: ERROR.BLOCK_TYPE,
             status: 400,
           };
         }
+
+        return true;
       }
     }),
 ];
