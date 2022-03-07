@@ -20,4 +20,6 @@ export type UserIdParam = { userId: string };
 
 export type WritingIdParam = { writingId: string };
 
+export type BlockIdParam = { blockId: string };
+
 export type StateQuery = 'editing' | 'done' | undefined;
