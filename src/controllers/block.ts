@@ -65,7 +65,7 @@ class BlockController implements IBlockController {
 
   update = async (
     req: TypedRequestBodyAndParams<BlockSchema, BlockIdParam>,
-    res: Response<any, Record<string, any>>,
+    res: Response,
     next: NextFunction
   ): Promise<void> => {
     const { blockId } = req.params;
