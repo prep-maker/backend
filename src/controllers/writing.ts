@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { BlockResponse } from '../common/types/block.js';
+import { BlockResponse, BlockSchema } from '../common/types/block.js';
 import {
   StateQuery,
   TypedRequestBodyAndParams,
@@ -29,6 +29,14 @@ interface IWritingController {
   ) => Promise<void>;
   update: (
     req: TypedRequestBodyAndParams<UpdateQuery, UserIdParam & WritingIdParam>,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  updateBlocks: (
+    req: TypedRequestBodyAndParams<
+      { blocks: BlockSchema[] },
+      UserIdParam & WritingIdParam
+    >,
     res: Response,
     next: NextFunction
   ) => Promise<void>;
@@ -95,6 +103,23 @@ class WritingController implements IWritingController {
     const { title, isDone } = req.body;
     const result: ResultState<WritingResponse> =
       await this.writingPresenter.update(writingId, { title, isDone });
+
+    if (result.state !== 'success') {
+      return next(result);
+    }
+
+    res.json(result.data);
+  };
+
+  updateBlocks = async (
+    req: TypedRequestBodyAndParams<{ blocks: BlockSchema[] }, WritingIdParam>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { writingId } = req.params;
+    const { blocks } = req.body;
+
+    const result = await this.writingPresenter.updateBlocks(writingId, blocks);
 
     if (result.state !== 'success') {
       return next(result);

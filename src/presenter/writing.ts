@@ -1,7 +1,11 @@
 import { pipe } from '@fxts/core';
 import mongoose from 'mongoose';
 import { ERROR } from '../common/constants/error.js';
-import { BlockRepository, BlockResponse } from '../common/types/block.js';
+import {
+  BlockRepository,
+  BlockResponse,
+  BlockSchema,
+} from '../common/types/block.js';
 import { StateQuery } from '../common/types/express.js';
 import { UserRepository } from '../common/types/user.js';
 import {
@@ -22,6 +26,7 @@ export interface IWritingPresenter {
   create: (userId: string) => WritingResult;
   remove: (userId: string, writingId: string) => BlockListResult;
   update: (writingId: string, query: UpdateQuery) => WritingResult;
+  updateBlocks: (writingId: string, block: BlockSchema[]) => BlockListResult;
 }
 
 class WritingPresenter implements IWritingPresenter {
@@ -98,6 +103,22 @@ class WritingPresenter implements IWritingPresenter {
 
     const result = await pipe(
       this.writingService.update.bind(this, writingId, query),
+      catchError
+    );
+
+    return result;
+  };
+
+  updateBlocks = async (
+    writingId: string,
+    blocks: BlockSchema[]
+  ): BlockListResult => {
+    if (!mongoose.isValidObjectId(writingId)) {
+      return useFailState(ERROR.INVALID_WRITING_ID, 400);
+    }
+
+    const result = await pipe(
+      this.writingService.updateBlocks.bind(this, writingId, blocks),
       catchError
     );
 

@@ -12,12 +12,10 @@ import { useFailState } from '../common/utils/state.js';
 import BlockService, { IBlockService } from '../services/block.js';
 
 type BlockResult = Promise<ResultState<BlockResponse>>;
-type BlockListResult = Promise<ResultState<BlockResponse[]>>;
 
 export interface IBlockPresenter {
   create: (writingId: string, block: BlockSchema) => BlockResult;
   remove: (writingId: string, blockId: string) => Promise<BadState | void>;
-  update: (writingId: string, block: BlockSchema[]) => BlockListResult;
 }
 
 class BlockPresenter implements IBlockPresenter {
@@ -35,22 +33,6 @@ class BlockPresenter implements IBlockPresenter {
       this.writingModel
     );
   }
-
-  update = async (
-    writingId: string,
-    blocks: BlockSchema[]
-  ): BlockListResult => {
-    if (!mongoose.isValidObjectId(writingId)) {
-      return useFailState(ERROR.INVALID_WRITING_ID, 400);
-    }
-
-    const result = await pipe(
-      this.blockService.update.bind(this, writingId, blocks),
-      catchError
-    );
-
-    return result;
-  };
 
   create = async (writingId: string, block: BlockSchema): BlockResult => {
     if (!mongoose.isValidObjectId(writingId)) {

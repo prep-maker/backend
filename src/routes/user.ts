@@ -48,7 +48,7 @@ const blockController = new BlockController(blockPresenter);
 router
   .route('/:userId/writings/:writingId/blocks')
   .post(validatorsForCreateBlock, blockController.create)
-  .put(validatorForUpdateBlocks, blockController.update);
+  .put(validatorForUpdateBlocks, writingController.updateBlocks);
 
 router
   .route('/:userId/writings/:writingId/blocks/:blockId')
