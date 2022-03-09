@@ -67,6 +67,17 @@ blockSchema.statics.createBlocks = async function (
   return result;
 };
 
+blockSchema.statics.updateById = async function (
+  id: string,
+  block: BlockSchema
+): Promise<BlockResponse> {
+  const updated: BlockDocument = await this.findByIdAndUpdate(id, block, {
+    new: true,
+  }).lean();
+
+  return { ...updated, id: updated._id };
+};
+
 const blockModel = mongoose.model<BlockSchema, BlockModel>(
   'Block',
   blockSchema

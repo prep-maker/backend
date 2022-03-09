@@ -16,6 +16,7 @@ type BlockResult = Promise<ResultState<BlockResponse>>;
 export interface IBlockPresenter {
   create: (writingId: string, block: BlockSchema) => BlockResult;
   remove: (writingId: string, blockId: string) => Promise<BadState | void>;
+  update: (blockId: string, block: BlockSchema) => BlockResult;
 }
 
 class BlockPresenter implements IBlockPresenter {
@@ -58,6 +59,19 @@ class BlockPresenter implements IBlockPresenter {
 
     const result = await pipe(
       this.blockService.remove.bind(this, writingId, blockId),
+      catchError
+    );
+
+    return result;
+  };
+
+  update = async (blockId: string, block: BlockSchema): BlockResult => {
+    if (!mongoose.isValidObjectId(blockId)) {
+      return useFailState(ERROR.INVALID_BLOCK_ID, 400);
+    }
+
+    const result = await pipe(
+      this.blockService.update.bind(this, blockId, block),
       catchError
     );
 

@@ -19,6 +19,7 @@ export interface BlockRepository {
   deleteByIds: (ids: readonly ObjectId[] | readonly string[]) => Promise<void>;
   create: (block: BlockSchema) => Promise<BlockDocument>;
   createBlocks: (block: BlockSchema[]) => Promise<BlockResponse[]>;
+  updateById: (blockId: string, block: BlockSchema) => Promise<BlockResponse>;
 }
 
 export type BlockModel = Model<BlockDocument> & BlockRepository;
