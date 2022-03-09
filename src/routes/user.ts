@@ -2,12 +2,13 @@ import express from 'express';
 import BlockController from '../controllers/block.js';
 import WritingController from '../controllers/writing.js';
 import {
-  paramsValidator,
   userParamValidators,
   validatorForUpdateBlocks,
   validatorsForCreateBlock,
   validatorsForDeleteBlock,
+  validatorsForDeleteWriting,
   validatorsForGetWritings,
+  validatorsForUpdateBlock,
   validatorsForUpdateWriting,
 } from '../middlewares/validators/index.js';
 import blockModel from '../models/block.js';
@@ -35,7 +36,7 @@ router
 
 router
   .route('/:userId/writings/:writingId')
-  .delete(paramsValidator, writingController.remove)
+  .delete(validatorsForDeleteWriting, writingController.remove)
   .put(validatorsForUpdateWriting, writingController.update);
 
 const blockPresenter = new BlockPresenter(
@@ -52,6 +53,7 @@ router
 
 router
   .route('/:userId/writings/:writingId/blocks/:blockId')
-  .delete(validatorsForDeleteBlock, blockController.remove);
+  .delete(validatorsForDeleteBlock, blockController.remove)
+  .put(validatorsForUpdateBlock, blockController.update);
 
 export default router;

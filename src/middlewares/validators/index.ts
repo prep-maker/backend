@@ -28,35 +28,55 @@ const validate = (
 };
 
 export const signupValidators = [...signupBodyChain, validate];
+
 export const signinValidators = [...signinBodyChain, validate];
 
 export const userParamValidators = [...userIdChain, validate];
+
 export const validatorsForGetWritings = [
   ...stateQueryChain,
   ...userIdChain,
   validate,
 ];
-export const paramsValidator = [...userIdChain, ...writingIdChain, validate];
+
+export const validatorsForDeleteWriting = [
+  ...userIdChain,
+  ...writingIdChain,
+  validate,
+];
+
 export const validatorsForUpdateWriting = [
   ...userIdChain,
   ...writingIdChain,
   ...writingBodyChain,
   validate,
 ];
+
 export const validatorsForCreateBlock = [
   ...userIdChain,
   ...writingIdChain,
   ...blockBodyChain,
   validate,
 ];
+
 export const validatorsForDeleteBlock = [
   ...userIdChain,
   ...writingIdChain,
   ...blockIdChain,
   validate,
 ];
+
 export const validatorForUpdateBlocks = [
+  ...userIdChain,
+  ...writingIdChain,
   ...writingIdChain,
   ...blockListBodyChain,
   validate,
+];
+
+export const validatorsForUpdateBlock = [
+  ...userIdChain,
+  ...writingIdChain,
+  ...blockIdChain,
+  ...blockBodyChain,
 ];
