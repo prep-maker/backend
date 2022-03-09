@@ -46,37 +46,32 @@ export const validatorsForDeleteWriting = [
 ];
 
 export const validatorsForUpdateWriting = [
-  ...userIdChain,
   ...writingIdChain,
   ...writingBodyChain,
   validate,
 ];
 
 export const validatorsForCreateBlock = [
-  ...userIdChain,
   ...writingIdChain,
   ...blockBodyChain,
   validate,
 ];
 
 export const validatorsForDeleteBlock = [
-  ...userIdChain,
   ...writingIdChain,
   ...blockIdChain,
   validate,
 ];
 
-export const validatorForUpdateBlocks = [
-  ...userIdChain,
-  ...writingIdChain,
+export const validatorsForUpdateBlocks = [
   ...writingIdChain,
   ...blockListBodyChain,
   validate,
 ];
 
 export const validatorsForUpdateBlock = [
-  ...userIdChain,
   ...writingIdChain,
   ...blockIdChain,
   ...blockBodyChain,
+  validate,
 ];

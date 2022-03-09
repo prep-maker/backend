@@ -3,6 +3,7 @@ import config from './common/config/index.js';
 import initApp from './loaders/index.js';
 import authRouter from './routes/auth.js';
 import userRouter from './routes/user.js';
+import writingRotuer from './routes/writing.js';
 
 const app = express();
 
@@ -10,6 +11,7 @@ initApp(app);
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+app.use('/writings', writingRotuer);
 
 app.use((req: Request, res: Response) => {
   res.send('Not Found');

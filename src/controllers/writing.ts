@@ -67,7 +67,7 @@ class WritingController implements IWritingController {
     res: Response,
     next: NextFunction
   ) => {
-    const userId: string = req.params.userId;
+    const { userId } = req.params;
     const result: ResultState<WritingResponse> =
       await this.writingPresenter.create(userId);
 
@@ -95,7 +95,7 @@ class WritingController implements IWritingController {
   };
 
   update = async (
-    req: TypedRequestBodyAndParams<UpdateQuery, UserIdParam & WritingIdParam>,
+    req: TypedRequestBodyAndParams<UpdateQuery, WritingIdParam>,
     res: Response,
     next: NextFunction
   ) => {

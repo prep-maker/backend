@@ -55,6 +55,7 @@ export const blockIdChain = [
     .withMessage({ message: ERROR.INVALID_BLOCK_ID, status: 400 })
     .custom(async (id: string) => {
       let block: BlockDocument | null;
+
       try {
         block = await blockModel.findById(id);
       } catch (error) {
