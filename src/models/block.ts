@@ -18,6 +18,13 @@ const paragraphSchema: Schema<ParagraphSchema> = new mongoose.Schema({
   content: {
     type: String,
   },
+  comments: [
+    {
+      author: mongoose.Types.ObjectId,
+      username: String,
+      content: String,
+    },
+  ],
 });
 
 const blockSchema: Schema<BlockSchema> = new mongoose.Schema({

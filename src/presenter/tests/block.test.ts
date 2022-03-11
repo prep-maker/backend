@@ -21,7 +21,12 @@ describe('BlockPresenter', () => {
   describe('create', () => {
     const newBlock: BlockSchema = {
       type: 'P',
-      paragraphs: [{ type: 'P', content: '' }],
+      paragraphs: [
+        {
+          type: 'P',
+          content: '',
+        },
+      ],
     };
     it('새로운 block 다큐먼트를 생성하고 관련 writing 다큐먼트를 업데이트 한다.', async () => {
       const spy = jest.spyOn(writingModel, 'updateById');

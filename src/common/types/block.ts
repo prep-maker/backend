@@ -4,6 +4,11 @@ import { ObjectId } from './mongoose';
 export type ParagraphSchema = {
   type: 'P' | 'R' | 'E';
   content: string;
+  comments?: {
+    author: ObjectId;
+    username: string;
+    content: string;
+  };
 };
 
 export type BlockSchema = {
