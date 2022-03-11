@@ -5,9 +5,10 @@
   "main": "dist/app.js",
   "type": "module",
   "scripts": {
-    "start": "concurrently \"tsc -w\" \"nodemon dist/app\"",
+    "start:dev": "concurrently \"tsc -w\" \"nodemon dist/app\"",
+    "start": "npm run build & node dist/app.js",
     "test": "jest --verbose --watchAll --coverage",
-    "prepare": "husky install"
+    "build": "tsc"
   },
   "author": "hyemin",
   "license": "ISC",
