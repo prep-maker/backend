@@ -6,8 +6,11 @@ import dummyUsers from './dummyUsers';
 export const USER_ID = '621dfdcec156df650b5f6e74';
 
 class UserModelStub implements UserRepository {
-  findByEmail = async (email: string) =>
-    dummyUsers.find((user) => user.email === email) as any;
+  findByEmail = async (email: string) => {
+    const user = dummyUsers.find((user) => user.email === email) as any;
+
+    return user ? { ...user, isPasswordValid: async () => true } : null;
+  };
 
   createNewUser = async (user: UserAccount) =>
     ({
