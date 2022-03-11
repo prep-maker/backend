@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start:dev": "concurrently \"tsc -w\" \"nodemon dist/app\"",
-    "start": "npm run build & node dist/app.js",
+    "start": "npm run build && node dist/app.js",
     "test": "jest --verbose --watchAll --coverage",
     "build": "tsc"
   },
