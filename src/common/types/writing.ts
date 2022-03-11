@@ -12,6 +12,7 @@ export type WritingSchema = {
 export type WritingResponse = {
   readonly id: ObjectId;
   readonly isDone: boolean;
+  readonly author: ObjectId;
   readonly title: string;
   readonly blocks?: BlockDocument[];
 };

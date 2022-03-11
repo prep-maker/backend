@@ -45,6 +45,7 @@ class WritingService implements IWritingService {
     const result: WritingResponse[] = writings.map((writing) => ({
       id: writing._id,
       isDone: writing.isDone,
+      author: writing.author,
       title: writing.title,
       blocks: writing.blocks.map((block) => ({
         ...block,
@@ -91,6 +92,7 @@ class WritingService implements IWritingService {
     return useSuccessState({
       id: newWriting._id,
       isDone: false,
+      author: newWriting.author,
       title: 'Untitled',
       blocks: [],
     });
@@ -112,11 +114,12 @@ class WritingService implements IWritingService {
       writingId,
       query
     );
-    const { _id, isDone, title, blocks } = updated;
+    const { _id, isDone, author, title, blocks } = updated;
 
     return useSuccessState({
       id: _id,
       isDone,
+      author,
       title,
       blocks,
     });
