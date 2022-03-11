@@ -3,10 +3,10 @@ import { ERROR } from '../../common/constants/error';
 import { ObjectId } from '../../common/types/mongoose';
 import { WritingSchema } from '../../common/types/writing';
 import { useFailState, useSuccessState } from '../../common/utils/state';
-import BlockModelStub from '../../fixtures/blockModelStub';
+import BlockModelStub, { BLOCK_ID } from '../../fixtures/blockModelStub';
 import dummyWritings from '../../fixtures/dummyWritings';
 import UserModelStub from '../../fixtures/userModelStub';
-import WritingModelStub from '../../fixtures/writingModelStub';
+import WritingModelStub, { WRITING_ID } from '../../fixtures/writingModelStub';
 import WritingService from '../../services/writing';
 import WritingPresenter from '../writing';
 
@@ -16,7 +16,6 @@ describe('WritingPresenter', () => {
   let writingModelStub: WritingModelStub;
   let blockModelStub: BlockModelStub;
   const USER_ID = '621cafb14ed8fbc8812e845c';
-  const WRITING_ID = '621cb0b250e465dfac337175';
   const INVALID_ID = 'invalid id';
 
   beforeEach(() => {
@@ -80,7 +79,7 @@ describe('WritingPresenter', () => {
     it('userId가 입력되면 새 writing을 생성하고 SuccessState로 리턴한다', async () => {
       const spy = jest.spyOn(userModelStub, 'addWriting');
       const newWriting = {
-        id: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
+        id: mongoose.Types.ObjectId(WRITING_ID),
         isDone: false,
         title: 'Untitled',
         blocks: [],
@@ -125,7 +124,7 @@ describe('WritingPresenter', () => {
 
       expect(userSpy).toBeCalledWith(USER_ID, WRITING_ID);
       expect(writingSpy).toBeCalledWith(WRITING_ID);
-      expect(blockSpy).toBeCalledWith(['blockId1', 'blockId2']);
+      expect(blockSpy).toBeCalledWith([mongoose.Types.ObjectId(BLOCK_ID)]);
     });
   });
 

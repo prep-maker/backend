@@ -7,7 +7,10 @@ import {
   WritingRepository,
   WritingSchema,
 } from '../common/types/writing';
+import { BLOCK_ID } from './blockModelStub';
 import dummyWritings from './dummyWritings';
+
+export const WRITING_ID = '621cb0b250e465dfac337175';
 
 class WritingModelStub implements WritingRepository {
   findAllByUserId = async (userId: ObjectId): Promise<WritingDocument[]> =>
@@ -29,7 +32,7 @@ class WritingModelStub implements WritingRepository {
 
   create = async (writing: WritingSchema): Promise<WritingDocument> =>
     ({
-      _id: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
+      _id: mongoose.Types.ObjectId(WRITING_ID),
       isDone: false,
       author: writing.author,
       title: writing.title,
@@ -38,7 +41,7 @@ class WritingModelStub implements WritingRepository {
 
   deleteById = async (wrtingId: string): Promise<BlockResponse[]> => [
     {
-      id: mongoose.Types.ObjectId('621cb0b250e465dfac337175'),
+      id: mongoose.Types.ObjectId(BLOCK_ID),
       type: 'P',
       paragraphs: [],
     },
