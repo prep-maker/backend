@@ -34,23 +34,6 @@ class WritingService implements IWritingService {
     private readonly blockModel: BlockRepository
   ) {}
 
-  updateBlocks = async (
-    writingId: string,
-    blocks: BlockSchema[]
-  ): BlockListResult => {
-    const newBlocks = await this.blockModel.createBlocks(blocks);
-    const blockIds = newBlocks.map((block) => block.id);
-    const writing = await this.writingModel.updateById(
-      writingId,
-      { blocks: blockIds },
-      { new: false }
-    );
-    const oldBlocks = writing.blocks.map((block) => block._id);
-    await this.blockModel.deleteByIds(oldBlocks);
-
-    return useSuccessState(newBlocks);
-  };
-
   getByUserIdAndState = async (
     userId: string,
     state: StateQuery
@@ -137,6 +120,23 @@ class WritingService implements IWritingService {
       title,
       blocks,
     });
+  };
+
+  updateBlocks = async (
+    writingId: string,
+    blocks: BlockSchema[]
+  ): BlockListResult => {
+    const newBlocks = await this.blockModel.createBlocks(blocks);
+    const blockIds = newBlocks.map((block) => block.id);
+    const writing = await this.writingModel.updateById(
+      writingId,
+      { blocks: blockIds },
+      { new: false }
+    );
+    const oldBlocks = writing.blocks.map((block) => block._id);
+    await this.blockModel.deleteByIds(oldBlocks);
+
+    return useSuccessState(newBlocks);
   };
 }
 
