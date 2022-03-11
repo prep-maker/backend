@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import mongoose, { Schema } from 'mongoose';
 import config from '../common/config/index.js';
 import { UserAccount, UserDocument, UserModel } from '../common/types/user.js';
