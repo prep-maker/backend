@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+export const EMAIL = 'test1@email.com';
+
 export default [
   {
     _id: mongoose.Types.ObjectId('621cafb14ed8fbc8812e845c'),
