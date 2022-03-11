@@ -24,6 +24,9 @@ type Config = {
     secretKey: string;
     expiresIn: string;
   };
+  cors: {
+    allowedOrigin: string;
+  };
 };
 
 const config: Config = {
@@ -37,6 +40,9 @@ const config: Config = {
   jwt: {
     secretKey: getEnv('JWT_SECRET_KEY'),
     expiresIn: getEnv('JWT_EXPIRES_IN'),
+  },
+  cors: {
+    allowedOrigin: getEnv('CORS_ALLOW_ORIGIN'),
   },
 };
 
