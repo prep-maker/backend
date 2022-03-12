@@ -17,6 +17,11 @@ interface IWritingController {
     res: Response,
     next: NextFunction
   ) => Promise<void>;
+  getOne: (
+    req: TypedRequestParams<{ writingId: string }>,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
   create: (
     req: TypedRequestParams<UserIdParam>,
     res: Response,
@@ -50,10 +55,26 @@ class WritingController implements IWritingController {
     res: Response,
     next: NextFunction
   ) => {
-    const userId: string = req.params.userId;
+    const { userId } = req.params;
     const state: StateQuery = req.query.state;
     const result: ResultState<WritingResponse[]> =
       await this.writingPresenter.getByUserIdAndState(userId, state);
+
+    if (result.state !== 'success') {
+      return next(result);
+    }
+
+    res.json(result.data);
+  };
+
+  getOne = async (
+    req: TypedRequestParams<{ writingId: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { writingId } = req.params;
+    const result: ResultState<WritingResponse> =
+      await this.writingPresenter.getOneById(writingId);
 
     if (result.state !== 'success') {
       return next(result);

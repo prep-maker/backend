@@ -25,9 +25,12 @@ export type UpdateQuery = {
 };
 
 export interface WritingRepository {
-  findAllByUserId: (userId: ObjectId) => Promise<WritingDocument[]>;
-  findDoneByUserId: (userId: ObjectId) => Promise<WritingDocument[]>;
-  findEditingByUserId: (userId: ObjectId) => Promise<WritingDocument[]>;
+  findAllByUserId: (userId: string) => Promise<WritingDocument[]>;
+  findDoneByUserId: (userId: string) => Promise<WritingDocument[]>;
+  findEditingByUserId: (userId: string) => Promise<WritingDocument[]>;
+  findById: (
+    writingId: string
+  ) => Promise<WritingDocument> & { lean: () => Promise<WritingDocument> };
   create: (writing: WritingSchema) => Promise<WritingDocument>;
   deleteById: (id: string) => Promise<BlockResponse[]>;
   updateById: (

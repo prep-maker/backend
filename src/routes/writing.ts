@@ -7,6 +7,7 @@ import {
   validatorsForUpdateBlock,
   validatorsForUpdateBlocks,
   validatorsForUpdateWriting,
+  writingParamValidators,
 } from '../middlewares/validators/index.js';
 import blockModel from '../models/block.js';
 import userModel from '../models/user.js';
@@ -28,6 +29,7 @@ const writingController = new WritingController(writingPresenter);
 
 router
   .route('/:writingId')
+  .get(writingParamValidators, writingController.getOne)
   .put(validatorsForUpdateWriting, writingController.update);
 
 const blockPresenter = new BlockPresenter(

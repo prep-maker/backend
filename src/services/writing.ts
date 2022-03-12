@@ -21,6 +21,7 @@ type BlockListResult = Promise<SuccessState<BlockResponse[]>>;
 
 export interface IWritingService {
   getByUserIdAndState: (userId: string, state: StateQuery) => WritingListResult;
+  getOneById: (writingId: string) => WritingResult;
   create: (userId: string) => WritingResult;
   remove: (userId: string, writingId: string) => BlockListResult;
   update: (writingId: string, query: UpdateQuery) => WritingResult;
@@ -77,6 +78,14 @@ class WritingService implements IWritingService {
         return result;
       }
     }
+  };
+
+  getOneById = async (writingId: string): WritingResult => {
+    const writing: WritingDocument = await this.writingModel
+      .findById(writingId)
+      .lean();
+
+    return useSuccessState({ ...writing, id: writing._id });
   };
 
   create = async (userId: string): WritingResult => {

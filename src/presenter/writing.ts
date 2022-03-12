@@ -23,6 +23,7 @@ type BlockListResult = Promise<ResultState<BlockResponse[]>>;
 
 export interface IWritingPresenter {
   getByUserIdAndState: (userId: string, state: StateQuery) => WritingListResult;
+  getOneById: (writingId: string) => WritingResult;
   create: (userId: string) => WritingResult;
   remove: (userId: string, writingId: string) => BlockListResult;
   update: (writingId: string, query: UpdateQuery) => WritingResult;
@@ -59,6 +60,19 @@ class WritingPresenter implements IWritingPresenter {
 
     const result = await pipe(
       this.writingService.getByUserIdAndState.bind(this, userId, state),
+      catchError
+    );
+
+    return result;
+  };
+
+  getOneById = async (writingId: string): WritingResult => {
+    if (!mongoose.isValidObjectId(writingId)) {
+      return useFailState(ERROR.INVALID_WRITING_ID, 400);
+    }
+
+    const result = await pipe(
+      this.writingService.getOneById.bind(this, writingId),
       catchError
     );
 

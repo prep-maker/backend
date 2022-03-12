@@ -13,21 +13,28 @@ import dummyWritings from './dummyWritings';
 export const WRITING_ID = '621cb0b250e465dfac337175';
 
 class WritingModelStub implements WritingRepository {
-  findAllByUserId = async (userId: ObjectId): Promise<WritingDocument[]> =>
+  findAllByUserId = async (userId: string): Promise<WritingDocument[]> =>
     getDocumentsByUserId(userId) as any;
 
-  findDoneByUserId = async (userId: ObjectId): Promise<WritingDocument[]> =>
+  findDoneByUserId = async (userId: string): Promise<WritingDocument[]> =>
     pipe(
       getDocumentsByUserId(userId),
       filter((writing) => writing.isDone),
       toArray
     ) as any;
 
-  findEditingByUserId = async (userId: ObjectId): Promise<WritingDocument[]> =>
+  findEditingByUserId = async (userId: string): Promise<WritingDocument[]> =>
     pipe(
       getDocumentsByUserId(userId),
       filter((writing) => !writing.isDone),
       toArray
+    ) as any;
+
+  findById = (
+    writingId: string
+  ): Promise<WritingDocument> & { lean: () => Promise<WritingDocument> } =>
+    dummyWritings.find(
+      (writing) => writing._id.toString() === writingId
     ) as any;
 
   create = async (writing: WritingSchema): Promise<WritingDocument> =>

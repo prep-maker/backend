@@ -33,6 +33,8 @@ export const signinValidators = [...signinBodyChain, validate];
 
 export const userParamValidators = [...userIdChain, validate];
 
+export const writingParamValidators = [...writingIdChain, validate];
+
 export const validatorsForGetWritings = [
   ...stateQueryChain,
   ...userIdChain,
