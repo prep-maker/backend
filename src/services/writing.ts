@@ -43,16 +43,7 @@ class WritingService implements IWritingService {
       userId,
       state
     );
-    const result: WritingResponse[] = writings.map((writing) => ({
-      id: writing._id,
-      isDone: writing.isDone,
-      author: writing.author,
-      title: writing.title,
-      blocks: writing.blocks.map((block) => ({
-        ...block,
-        id: block._id,
-      })) as BlockDocument[] & { id: ObjectId },
-    }));
+    const result: WritingResponse[] = writings.map(this.mapWritingToResponse);
 
     return useSuccessState(result);
   };
@@ -85,9 +76,23 @@ class WritingService implements IWritingService {
       .findById(writingId)
       .populate('blocks')
       .lean();
+    const result: WritingResponse = this.mapWritingToResponse(writing);
 
-    return useSuccessState({ ...writing, id: writing._id });
+    return useSuccessState(result);
   };
+
+  private mapWritingToResponse = (
+    writing: WritingDocument
+  ): WritingResponse => ({
+    id: writing._id,
+    isDone: writing.isDone,
+    author: writing.author,
+    title: writing.title,
+    blocks: writing.blocks.map((block) => ({
+      ...block,
+      id: block._id,
+    })) as BlockDocument[] & { id: ObjectId },
+  });
 
   create = async (userId: string): WritingResult => {
     const initial = {
