@@ -32,10 +32,17 @@ class WritingModelStub implements WritingRepository {
 
   findById = (
     writingId: string
-  ): Promise<WritingDocument> & { lean: () => Promise<WritingDocument> } =>
-    dummyWritings.find(
+  ): Promise<WritingDocument> & {
+    populate: (field: string) => { lean: () => Promise<WritingDocument> };
+  } => {
+    const writing = dummyWritings.find(
       (writing) => writing._id.toString() === writingId
-    ) as any;
+    );
+
+    return {
+      populate: (field: string) => ({ lean: () => writing }),
+    } as any;
+  };
 
   create = async (writing: WritingSchema): Promise<WritingDocument> =>
     ({

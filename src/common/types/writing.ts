@@ -28,9 +28,9 @@ export interface WritingRepository {
   findAllByUserId: (userId: string) => Promise<WritingDocument[]>;
   findDoneByUserId: (userId: string) => Promise<WritingDocument[]>;
   findEditingByUserId: (userId: string) => Promise<WritingDocument[]>;
-  findById: (
-    writingId: string
-  ) => Promise<WritingDocument> & { lean: () => Promise<WritingDocument> };
+  findById: (writingId: string) => Promise<WritingDocument> & {
+    populate: (field: string) => { lean: () => Promise<WritingDocument> };
+  };
   create: (writing: WritingSchema) => Promise<WritingDocument>;
   deleteById: (id: string) => Promise<BlockResponse[]>;
   updateById: (

@@ -83,6 +83,7 @@ class WritingService implements IWritingService {
   getOneById = async (writingId: string): WritingResult => {
     const writing: WritingDocument = await this.writingModel
       .findById(writingId)
+      .populate('blocks')
       .lean();
 
     return useSuccessState({ ...writing, id: writing._id });
