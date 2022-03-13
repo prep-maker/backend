@@ -80,6 +80,7 @@ describe('WritingPresenter', () => {
       const spy = jest.spyOn(userModelStub, 'addWriting');
       const newWriting = {
         id: mongoose.Types.ObjectId(WRITING_ID),
+        author: mongoose.Types.ObjectId(USER_ID),
         isDone: false,
         title: 'Untitled',
         blocks: [],
@@ -145,6 +146,7 @@ describe('WritingPresenter', () => {
       });
       const updated = {
         id: mongoose.Types.ObjectId(WRITING_ID),
+        author: 'author',
         isDone: true,
         title: 'update',
         blocks: [],
@@ -159,6 +161,7 @@ const mapWriting = (writing: WritingSchema & { _id: ObjectId }) => {
   return {
     id: writing._id,
     isDone: writing.isDone,
+    author: writing.author,
     title: writing.title,
     blocks: writing.blocks,
   };
