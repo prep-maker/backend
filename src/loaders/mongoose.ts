@@ -13,8 +13,8 @@ export const disconnectDB = () => {
   mongoose.disconnect();
 };
 
-export const clearDB = () => {
-  mongoose.deleteModel(/.+/);
+export const clearDB = async () => {
+  await mongoose.connection.db.dropDatabase();
 };
 
 export default connectDB;
