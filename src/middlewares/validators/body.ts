@@ -67,7 +67,6 @@ export const signinBodyChain = [
     .trim()
     .notEmpty()
     .withMessage({ message: ERROR.EMAIL_REQUIRED, status: 400 })
-    .normalizeEmail()
     .isEmail()
     .withMessage({ message: ERROR.INVALID_EMAIL, status: 400 }),
   body('password')
@@ -88,7 +87,6 @@ export const signupBodyChain = [
     .trim()
     .notEmpty()
     .withMessage({ message: ERROR.EMAIL_REQUIRED, status: 400 })
-    .normalizeEmail()
     .isEmail()
     .withMessage({ message: ERROR.INVALID_EMAIL, status: 400 }),
   body('name')
