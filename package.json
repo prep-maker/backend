@@ -7,7 +7,7 @@
   "scripts": {
     "start:dev": "concurrently \"tsc -w\" \"nodemon dist/index\"",
     "start": "npm run build && node dist/index.js",
-    "test": "jest --verbose --watchAll --coverage",
+    "test": "DOTENV_CONFIG_PATH=./.env.test jest --verbose --watchAll --coverage",
     "build": "tsc"
   },
   "author": "hyemin",
