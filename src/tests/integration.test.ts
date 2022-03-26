@@ -1,30 +1,11 @@
-import { faker } from '@faker-js/faker';
 import http from 'http';
 import request from 'supertest';
-import { app, startServer, stopServer } from '../../app';
-import { ERROR } from '../../common/constants/error';
-import { clearDB } from '../../loaders/mongoose.js';
+import { app, startServer, stopServer } from '../app';
+import { ERROR } from '../common/constants/error';
+import { clearDB } from '../loaders/mongoose.js';
+import { createNewUser, makeFakeUserDetail } from './integration-tests/utils';
 
-const makeFakeUserDetail = () => {
-  const fakeUser = faker.helpers.userCard();
-
-  return {
-    email: fakeUser.email,
-    name: fakeUser.username,
-    password: faker.internet.password(10),
-  };
-};
-
-const makeFakeUserAccount = () => {
-  const fakeUser = faker.helpers.userCard();
-
-  return {
-    email: fakeUser.email,
-    password: faker.internet.password(10),
-  };
-};
-
-describe('Auth Router', () => {
+describe('Integration test', () => {
   let server: http.Server;
   beforeAll(() => {
     server = startServer();
@@ -169,16 +150,16 @@ describe('Auth Router', () => {
       expect(res.body).toEqual({ message: ERROR.INVALID_LOGIN });
     });
 
-    const user = makeFakeUserAccount();
+    const user = makeFakeUserDetail();
     test.each([
       {
         property: 'email',
-        body: { ...user, email: '' },
+        body: { email: '', password: user.password },
         message: ERROR.EMAIL_REQUIRED,
       },
       {
         property: 'password',
-        body: { ...user, password: '' },
+        body: { email: user.email, password: '' },
         message: ERROR.PASSWORD_REQUIRED,
       },
     ])(
@@ -193,5 +174,22 @@ describe('Auth Router', () => {
         expect(res.body).toEqual({ message });
       }
     );
+  });
+
+  describe('User Router', () => {
+    describe('POST /:userId/writings', () => {
+      it('유저가 새 글을 생성하면 201 응답코드와 내용이 빈 writing을 응답한다', async () => {
+        const user = await createNewUser();
+
+        const res = await request(app).post(`/users/${user.id}/writings`);
+
+        expect(res.status).toBe(201);
+        expect(res.body).toMatchObject({
+          title: 'Untitled',
+          author: user.id,
+          isDone: false,
+        });
+      });
+    });
   });
 });

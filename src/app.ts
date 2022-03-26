@@ -20,7 +20,9 @@ export const startServer = (port?: number): http.Server => {
   });
 
   app.use((err: BadState, req: Request, res: Response, next: NextFunction) => {
-    console.error(err);
+    if (process.env.NODE_ENV !== 'test') {
+      console.error(err);
+    }
 
     if (err.state === 'error' || err.status === 500) {
       return res.status(err.status).json({ message: 'Server Error' });
