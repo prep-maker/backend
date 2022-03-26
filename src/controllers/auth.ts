@@ -21,7 +21,7 @@ class AuthController implements IAuthController {
       return next(result);
     }
 
-    res.json(result.data);
+    res.status(201).json(result.data);
   };
 
   signin = async (req: Request, res: Response, next: NextFunction) => {
