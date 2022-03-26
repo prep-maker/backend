@@ -97,7 +97,7 @@ export const signupBodyChain = [
     .trim()
     .notEmpty()
     .withMessage({ message: ERROR.NAME_REQUIRED, status: 400 })
-    .isLength({ max: 10 })
+    .isLength({ max: 20 })
     .withMessage({ message: ERROR.NAME_RANGE, status: 400 }),
   body('password')
     .isString()

@@ -30,7 +30,7 @@ export const ERROR = {
   IS_DONE_BOOL_REQUIRED: 'isDone은 boolean이어야 합니다.',
   TITLE_RANGE: 'title은 100글자 이하여야 합니다.',
   PASSWORD_RANGE: '비밀번호는 6자 이상 20자 이하여야 합니다.',
-  NAME_RANGE: '이름은 10자 이하여야 합니다.',
+  NAME_RANGE: '이름은 20자 이하여야 합니다.',
   BLOCKS_EXISTING:
     'blocks 프로퍼티는 입력이 불가합니다. blocks 업데이트는 PUT /users/:id/writings/:id/blocks를 이용해야 합니다.',
   NO_BLOCK_TYPE: 'block에 type이 없습니다.',
