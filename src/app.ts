@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import http from 'http';
 import config from './common/config/index.js';
 import initApp from './loaders/index.js';
+import { disconnectDB } from './loaders/mongoose.js';
 import authRouter from './routes/auth.js';
 import userRouter from './routes/user.js';
 import writingRotuer from './routes/writing.js';
@@ -34,4 +35,9 @@ export const startServer = (): http.Server => {
   });
 
   return server;
+};
+
+export const stopServer = (server: http.Server) => {
+  server.close();
+  disconnectDB();
 };

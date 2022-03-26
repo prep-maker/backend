@@ -9,4 +9,8 @@ const connectDB = () => {
   });
 };
 
+export const disconnectDB = () => {
+  mongoose.disconnect();
+};
+
 export default connectDB;
