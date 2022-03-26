@@ -8,6 +8,7 @@ coverage/
 dist/
 .DS_Store
 .env
+.env.test
 .history/
 .husky/
 .eslintcache
