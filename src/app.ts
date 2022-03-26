@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
 import http from 'http';
-import config from './common/config/index.js';
 import initApp from './loaders/index.js';
 import { disconnectDB } from './loaders/mongoose.js';
 import authRouter from './routes/auth.js';
@@ -9,7 +8,7 @@ import writingRotuer from './routes/writing.js';
 
 export const app = express();
 
-export const startServer = (): http.Server => {
+export const startServer = (port?: number): http.Server => {
   initApp(app);
 
   app.use('/auth', authRouter);
@@ -30,7 +29,7 @@ export const startServer = (): http.Server => {
     res.status(err.status).json({ message: err.message });
   });
 
-  const server = app.listen(config.port, () => {
+  const server = app.listen(port, () => {
     console.log('Server is ready');
   });
 
