@@ -16,7 +16,7 @@ export const startServer = (port?: number): http.Server => {
   app.use('/writings', writingRotuer);
 
   app.use((req: Request, res: Response) => {
-    res.send('Not Found');
+    res.status(404).send('Not Found');
   });
 
   app.use((err: BadState, req: Request, res: Response, next: NextFunction) => {
