@@ -23,3 +23,13 @@ export const createNewUser = async () => {
 
   return res.body as any;
 };
+
+export const createNewWriting = async (): Promise<{
+  writing: WritingResponse;
+  user: UserResponse;
+}> => {
+  const user = await createNewUser();
+  const res = await request(app).post(`/users/${user.id}/writings`);
+
+  return { writing: res.body, user };
+};
