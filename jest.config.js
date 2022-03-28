@@ -6,7 +6,11 @@
 export default {
   clearMocks: true,
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.ts', '!**/node_modules/**'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!**/node_modules/**',
+    '!**/common/types/**',
+  ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   coverageReporters: ['json', 'text', 'lcov', 'clover'],
