@@ -1,9 +1,13 @@
 import http from 'http';
 import request from 'supertest';
-import { app, startServer, stopServer } from '../app';
-import { ERROR } from '../common/constants/error';
+import { app, startServer, stopServer } from '../app.js';
+import { ERROR } from '../common/constants/error.js';
 import { clearDB } from '../loaders/mongoose.js';
-import { createNewUser, makeFakeUserDetail } from './integration-tests/utils';
+import {
+  createNewUser,
+  createNewWriting,
+  makeFakeUserDetail,
+} from './utils.js';
 
 describe('Integration test', () => {
   let server: http.Server;

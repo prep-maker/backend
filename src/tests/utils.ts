@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker';
 import request from 'supertest';
 import { app } from '../app.js';
-import { UserAccount } from '../common/types/user.js';
+import { UserAccount, UserResponse } from '../common/types/user.js';
+import { WritingResponse } from '../common/types/writing.js';
 
 export const makeFakeUserDetail = (): UserAccount => {
   const fakeUser = faker.helpers.userCard();
