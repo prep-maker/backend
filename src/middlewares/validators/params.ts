@@ -10,6 +10,7 @@ import writingModel from '../../models/writing.js';
 export const userIdChain = [
   param('userId')
     .isMongoId()
+    .bail()
     .withMessage({ message: ERROR.INVALID_USER_ID, status: 400 })
     .custom(async (id: string) => {
       let user: UserDocument | null;
@@ -31,6 +32,7 @@ export const userIdChain = [
 export const writingIdChain = [
   param('writingId')
     .isMongoId()
+    .bail()
     .withMessage({ message: ERROR.INVALID_WRITING_ID, status: 400 })
     .custom(async (id: string) => {
       let writing: WritingDocument | null;
@@ -52,6 +54,7 @@ export const writingIdChain = [
 export const blockIdChain = [
   param('blockId')
     .isMongoId()
+    .bail()
     .withMessage({ message: ERROR.INVALID_BLOCK_ID, status: 400 })
     .custom(async (id: string) => {
       let block: BlockDocument | null;
