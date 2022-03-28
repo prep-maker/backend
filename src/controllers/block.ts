@@ -32,7 +32,7 @@ class BlockController implements IBlockController {
   constructor(private readonly blockPresenter: IBlockPresenter) {}
 
   create = async (
-    req: TypedRequestBodyAndParams<BlockSchema, UserIdParam & WritingIdParam>,
+    req: TypedRequestBodyAndParams<BlockSchema, WritingIdParam>,
     res: Response,
     next: NextFunction
   ) => {
