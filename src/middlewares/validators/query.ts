@@ -8,7 +8,7 @@ const stateQueryChain = [
     }
 
     if (!['editing', 'done'].includes(value)) {
-      throw new Error(ERROR.INVALID_WIRINTG_QUERY);
+      throw { message: ERROR.INVALID_WIRINTG_QUERY, status: 400 };
     }
 
     return true;
