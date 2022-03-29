@@ -2,6 +2,7 @@ import http from 'http';
 import request from 'supertest';
 import { app, startServer, stopServer } from '../app.js';
 import { ERROR } from '../common/constants/error.js';
+import { WritingResponse } from '../common/types/writing.js';
 import { clearDB } from '../loaders/mongoose.js';
 import {
   createNewUser,
@@ -539,7 +540,7 @@ describe('Integration test', () => {
     });
 
     describe('DELETE /writings/:writingId/blocks/:blcokId', () => {
-      it('params의 blockId와 일치하는 block을 지우고 204 코드로 응답한다', async () => {
+      it('params의 blockId와 일치하는 block을 삭제하고 204 코드로 응답한다', async () => {
         const user = await createNewUser();
         const writing = await createNewWriting(user);
         const created = await request(app)
@@ -581,6 +582,139 @@ describe('Integration test', () => {
           author: user.id,
           isDone: false,
         });
+      });
+
+      it('잘못된 형식의 userId로 새 글 생성 요청을 보내면 400 코드와 에러 메세지로 응답한다', async () => {
+        const res = await request(app).post(`/users/abcd/writings`);
+
+        expect(res.status).toBe(400);
+        expect(res.body).toEqual({ message: ERROR.INVALID_USER_ID });
+      });
+
+      it('존재하지 않는 userId로 새 글 생성 요청을 보내면 404 코드와 에러메세지로 응답한다', async () => {
+        const res = await request(app).post(
+          `/users/623eb7bdfa3d8f71a10325f1/writings`
+        );
+
+        expect(res.status).toBe(404);
+        expect(res.body).toEqual({ message: ERROR.NOT_FOUND_USER });
+      });
+    });
+
+    describe('GET /users/:userId/writings', () => {
+      it('state 쿼리가 없으면 유저의 전체 writing을 응답한다.', async () => {
+        const user = await createNewUser();
+        const writings = await Promise.all([
+          createNewWriting(user),
+          createNewWriting(user),
+          createNewWriting(user),
+          createNewWriting(user),
+        ]);
+        await Promise.all(
+          [writings[0], writings[1]].map((writing) =>
+            request(app)
+              .put(`/writings/${writing.id}`)
+              .set('Accept', 'application/json')
+              .send({
+                title: 'test',
+                isDone: true,
+              })
+          )
+        );
+
+        const res = await request(app).get(`/users/${user.id}/writings`);
+
+        expect(res.status).toBe(200);
+        expect(res.body.length).toBe(4);
+      });
+
+      it('state 쿼리가 done이면 isDone이 true인 writing들만 응답한다', async () => {
+        const user = await createNewUser();
+        const writings = await Promise.all([
+          createNewWriting(user),
+          createNewWriting(user),
+          createNewWriting(user),
+          createNewWriting(user),
+        ]);
+        await Promise.all(
+          [writings[0], writings[1]].map((writing) =>
+            request(app)
+              .put(`/writings/${writing.id}`)
+              .set('Accept', 'application/json')
+              .send({
+                title: 'test',
+                isDone: true,
+              })
+          )
+        );
+
+        const res = await request(app).get(
+          `/users/${user.id}/writings?state=done`
+        );
+
+        expect(res.status).toBe(200);
+        expect(res.body.length).toBe(2);
+        res.body.forEach((writing: WritingResponse) =>
+          expect(writing.isDone).toBeTruthy()
+        );
+      });
+
+      it('state 쿼리가 editing이면 isDone이 false인 writing들만 응답한다', async () => {
+        const user = await createNewUser();
+        const writings = await Promise.all([
+          createNewWriting(user),
+          createNewWriting(user),
+          createNewWriting(user),
+          createNewWriting(user),
+        ]);
+        await Promise.all(
+          [writings[0], writings[1]].map((writing) =>
+            request(app)
+              .put(`/writings/${writing.id}`)
+              .set('Accept', 'application/json')
+              .send({
+                title: 'test',
+                isDone: true,
+              })
+          )
+        );
+
+        const res = await request(app).get(
+          `/users/${user.id}/writings?state=editing`
+        );
+
+        expect(res.status).toBe(200);
+        expect(res.body.length).toBe(2);
+        res.body.forEach((writing: WritingResponse) =>
+          expect(writing.isDone).toBeFalsy()
+        );
+      });
+
+      it('editing, done 외의 state 쿼리가 입력되면 400 코드와 에러 메세지를 응답한다', async () => {
+        const user = await createNewUser();
+
+        const res = await request(app).get(
+          `/users/${user.id}/writings?state=hello`
+        );
+
+        expect(res.status).toBe(400);
+        expect(res.body).toEqual({ message: ERROR.INVALID_WIRINTG_QUERY });
+      });
+    });
+
+    describe('DELETE /users/:userId/writings/:writingId', () => {
+      it('params의 writingId와 일치하는 writing을 삭제하고 204 코드로 응답한다', async () => {
+        const user = await createNewUser();
+        const writing = await createNewWriting(user);
+
+        const res = await request(app).delete(
+          `/users/${user.id}/writings/${writing.id}`
+        );
+        const writingRes = await request(app).get(`/writings/${writing.id}`);
+
+        expect(res.status).toBe(204);
+        expect(writingRes.status).toBe(404);
+        expect(writingRes.body).toEqual({ message: ERROR.NOT_FOUND_WRITING });
       });
     });
   });
