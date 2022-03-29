@@ -24,12 +24,10 @@ export const createNewUser = async () => {
   return res.body as any;
 };
 
-export const createNewWriting = async (): Promise<{
-  writing: WritingResponse;
-  user: UserResponse;
-}> => {
-  const user = await createNewUser();
+export const createNewWriting = async (
+  user: UserResponse
+): Promise<WritingResponse> => {
   const res = await request(app).post(`/users/${user.id}/writings`);
 
-  return { writing: res.body, user };
+  return res.body;
 };

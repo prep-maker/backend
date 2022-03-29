@@ -185,7 +185,8 @@ describe('Integration test', () => {
   describe('Writing Router', () => {
     describe('GET /writings/:writingId', () => {
       it('writingId params와 일치하는 writing을 응답한다. ', async () => {
-        const { writing, user } = await createNewWriting();
+        const user = await createNewUser();
+        const writing = await createNewWriting(user);
 
         const res = await request(app).get(`/writings/${writing.id}`);
 
@@ -218,7 +219,8 @@ describe('Integration test', () => {
 
     describe('PUT /writings/:writingId', () => {
       it('writingId params와 일치하는 writing을 요청 내용으로 업데이트하고 200 코드와 writing을 응답한다.', async () => {
-        const { writing, user } = await createNewWriting();
+        const user = await createNewUser();
+        const writing = await createNewWriting(user);
 
         const res = await request(app)
           .put(`/writings/${writing.id}`)
@@ -265,7 +267,8 @@ describe('Integration test', () => {
       });
 
       it('업데이트 요청 내용 blocks 프로퍼티가 포함되어 있으면 400 코드와 에러 메세지로 응답한다', async () => {
-        const { writing } = await createNewWriting();
+        const user = await createNewUser();
+        const writing = await createNewWriting(user);
 
         const res = await request(app)
           .put(`/writings/${writing.id}`)
@@ -283,7 +286,8 @@ describe('Integration test', () => {
 
     describe('POST /writings/:writingId/blocks/', () => {
       it('요청된 내용으로 새 블록을 생성하고 201 코드와 생성된 block을 응답한다.', async () => {
-        const { writing } = await createNewWriting();
+        const user = await createNewUser();
+        const writing = await createNewWriting(user);
 
         const res = await request(app)
           .post(`/writings/${writing.id}/blocks`)
@@ -352,7 +356,8 @@ describe('Integration test', () => {
       ])(
         `요청 body 잘못된 $property 프로퍼티가 입력되면 400 코드와 에러 메세지를 응답한다`,
         async ({ body, message }) => {
-          const { writing } = await createNewWriting();
+          const user = await createNewUser();
+          const writing = await createNewWriting(user);
 
           const res = await request(app)
             .post(`/writings/${writing.id}/blocks`)
@@ -367,7 +372,8 @@ describe('Integration test', () => {
 
     describe('PUT /writings/:wrtingId/blocks', () => {
       it('요청된 내용으로 글의 blocks를 업데이트하고 200코드와 업데이트된 block들을 응답한다.', async () => {
-        const { writing } = await createNewWriting();
+        const user = await createNewUser();
+        const writing = await createNewWriting(user);
 
         const res = await request(app)
           .put(`/writings/${writing.id}/blocks`)
@@ -421,7 +427,8 @@ describe('Integration test', () => {
       });
 
       it('잘못된 type의 block으로 업데이트를 요청하면 400코드와 에러 메세지를 응답한다', async () => {
-        const { writing } = await createNewWriting();
+        const user = await createNewUser();
+        const writing = await createNewWriting(user);
 
         const res = await request(app)
           .put(`/writings/${writing.id}/blocks`)
@@ -446,7 +453,8 @@ describe('Integration test', () => {
 
     describe('PUT /writings/:writingId/blocks/:blockId', () => {
       it('요청대로 block을 업데이트하고 200 코드와 업데이트된 block을 응답한다.', async () => {
-        const { writing } = await createNewWriting();
+        const user = await createNewUser();
+        const writing = await createNewWriting(user);
         const firstRes = await request(app)
           .post(`/writings/${writing.id}/blocks`)
           .set('Accept', 'application/json')
@@ -516,7 +524,8 @@ describe('Integration test', () => {
         expect(firstRes.status).toBe(404);
         expect(firstRes.body).toEqual({ message: ERROR.NOT_FOUND_WRITING });
 
-        const { writing } = await createNewWriting();
+        const user = await createNewUser();
+        const writing = await createNewWriting(user);
         const secondRes = await request(app)
           .put(`/writings/${writing.id}/blocks/623eb7bdfa3d8f71a10325f1`)
           .set('Accept', 'application/json')
@@ -531,7 +540,8 @@ describe('Integration test', () => {
 
     describe('DELETE /writings/:writingId/blocks/:blcokId', () => {
       it('params의 blockId와 일치하는 block을 지우고 204 코드로 응답한다.', async () => {
-        const { writing } = await createNewWriting();
+        const user = await createNewUser();
+        const writing = await createNewWriting(user);
         const firstRes = await request(app)
           .post(`/writings/${writing.id}/blocks/`)
           .set('Accept', 'application/json')
