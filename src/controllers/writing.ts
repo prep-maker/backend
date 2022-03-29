@@ -38,10 +38,7 @@ interface IWritingController {
     next: NextFunction
   ) => Promise<void>;
   updateBlocks: (
-    req: TypedRequestBodyAndParams<
-      { blocks: BlockSchema[] },
-      UserIdParam & WritingIdParam
-    >,
+    req: TypedRequestBodyAndParams<BlockSchema[], UserIdParam & WritingIdParam>,
     res: Response,
     next: NextFunction
   ) => Promise<void>;
@@ -133,12 +130,12 @@ class WritingController implements IWritingController {
   };
 
   updateBlocks = async (
-    req: TypedRequestBodyAndParams<{ blocks: BlockSchema[] }, WritingIdParam>,
+    req: TypedRequestBodyAndParams<BlockSchema[], WritingIdParam>,
     res: Response,
     next: NextFunction
   ) => {
     const { writingId } = req.params;
-    const { blocks } = req.body;
+    const blocks = req.body;
 
     const result = await this.writingPresenter.updateBlocks(writingId, blocks);
 

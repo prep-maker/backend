@@ -36,7 +36,7 @@ export const blockBodyChain = [
 ];
 
 export const blockListBodyChain = [
-  body('blocks')
+  body()
     .notEmpty()
     .withMessage({
       message: ERROR.BLOCK_LIST_REQUIRED,
