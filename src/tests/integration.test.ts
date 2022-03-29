@@ -703,7 +703,7 @@ describe('Integration test', () => {
     });
 
     describe('DELETE /users/:userId/writings/:writingId', () => {
-      it('params의 writingId와 일치하는 writing을 삭제하고 204 코드로 응답한다', async () => {
+      it('params의 writingId와 일치하는 writing을 삭제하고 200 코드와 삭제된 글의 block들로 응답한다', async () => {
         const user = await createNewUser();
         const writing = await createNewWriting(user);
 
@@ -712,7 +712,8 @@ describe('Integration test', () => {
         );
         const writingRes = await request(app).get(`/writings/${writing.id}`);
 
-        expect(res.status).toBe(204);
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual(writing.blocks);
         expect(writingRes.status).toBe(404);
         expect(writingRes.body).toEqual({ message: ERROR.NOT_FOUND_WRITING });
       });

@@ -109,7 +109,7 @@ class WritingController implements IWritingController {
       return next(result);
     }
 
-    res.status(204).json(result.data);
+    res.json(result.data);
   };
 
   update = async (
