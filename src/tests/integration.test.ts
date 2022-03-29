@@ -539,10 +539,10 @@ describe('Integration test', () => {
     });
 
     describe('DELETE /writings/:writingId/blocks/:blcokId', () => {
-      it('params의 blockId와 일치하는 block을 지우고 204 코드로 응답한다.', async () => {
+      it('params의 blockId와 일치하는 block을 지우고 204 코드로 응답한다', async () => {
         const user = await createNewUser();
         const writing = await createNewWriting(user);
-        const firstRes = await request(app)
+        const created = await request(app)
           .post(`/writings/${writing.id}/blocks/`)
           .set('Accept', 'application/json')
           .send({
@@ -555,13 +555,15 @@ describe('Integration test', () => {
               },
             ],
           });
-        const block = firstRes.body;
+        const block = created.body;
 
-        const res = await request(app).delete(
+        const firstRes = await request(app).delete(
           `/writings/${writing.id}/blocks/${block.id}`
         );
+        const writingRes = await request(app).get(`/writings/${writing.id}`);
 
-        expect(res.status).toBe(204);
+        expect(firstRes.status).toBe(204);
+        expect(writingRes.body.blocks).not.toContain(block.id);
       });
     });
   });
