@@ -64,7 +64,9 @@ blockSchema.statics.createBlocks = async function (
     return { ...newBlock, id: newBlock._id };
   };
 
-  const result = await Promise.all(blocks.map(create.bind(blockModel)));
+  const result = await Promise.all(
+    blocks.map((block) => create.call(blockModel, block))
+  );
 
   return result;
 };
