@@ -3,6 +3,10 @@
 https://www.prep-maker.site/  
 PREP Maker는 구조적 글쓰기를 도와주는 앱입니다. PREP 앱과 함께 P(주장, 주제) - R(이유, 설명) - E(예시) - P(주장, 주제 강조) 순서로 설득력있고 간결한 글을 쓸 수 있습니다.
 
+**PREP Maker는 로그인 후 이용 가능합니다.**  
+테스트용 이메일: test@email.com  
+테스트용 비밀번호: test1234
+
 ## 사용법
 
  <details>
